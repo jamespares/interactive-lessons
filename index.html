@@ -6,88 +6,94 @@
   <title>Interactive Learning Activities</title>
   <style>
     :root{
-      --bg:#0b1020; --card:#121a33; --muted:#94a3b8; --text:#f1f5f9; --accent:#7c3aed;
-      --english:#38bdf8; --uoi:#f472b6; --grid: clamp(280px, 62ch, 1100px);
+      --bg:#f8fafc; --card:#ffffff; --muted:#64748b; --text:#1e293b; --accent:#7c3aed;
+      --english:#3b82f6; --uoi:#ec4899; --french:#8b5cf6; --grid: clamp(280px, 62ch, 1200px);
+      --border:#e2e8f0;
     }
     *{box-sizing:border-box}
     html,body{height:100%; margin:0}
-    body{font: 16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial; background:radial-gradient(1200px 800px at 80% -10%, #1e293b22, transparent), var(--bg); color:var(--text); display:flex; align-items:center; justify-content:center; padding:1rem}
-    .container{max-width:var(--grid); width:100%}
-    h1{font-size:clamp(1.8rem,3vw+1rem,3rem); margin:0 0 1rem; text-align:center}
-    .subtitle{text-align:center; color:var(--muted); margin-bottom:3rem}
-    .grid{display:grid; gap:1.5rem}
-    @media(min-width:900px){.grid{grid-template-columns:1fr 1fr}}
-    .card{background:linear-gradient(180deg,#0f1730,#0b1227); border:1px solid #203056; border-radius:16px; padding:2rem; box-shadow:0 10px 30px #0006; transition:all 0.3s ease}
-    .card:hover{transform:translateY(-4px); box-shadow:0 20px 40px #0008; border-color:#2a3b67}
-    .card h2{margin:0 0 0.75rem; font-size:1.5rem}
-    .card p{color:var(--muted); margin:0 0 1.5rem; line-height:1.6}
-    .card ul{margin:0 0 1.5rem; padding-left:1.5rem; color:var(--muted)}
-    .card li{margin:0.4rem 0}
-    .btn{display:inline-block; padding:0.75rem 1.5rem; border-radius:10px; text-decoration:none; font-weight:600; transition:all 0.2s; border:1px solid}
-    .btn.english{background:linear-gradient(180deg,#0c4a6e,#082f49); border-color:#0b4569; color:#c3e8ff}
-    .btn.english:hover{background:linear-gradient(180deg,#0e5a85,#0a3a5a)}
-    .btn.uoi{background:linear-gradient(180deg,#701a75,#4a0e4e); border-color:#6f1345; color:#ffd7ea}
-    .btn.uoi:hover{background:linear-gradient(180deg,#86208a,#5a1560)}
-    .badge{display:inline-block; padding:0.25rem 0.65rem; border-radius:999px; font-size:0.85rem; font-weight:600; margin-bottom:0.75rem}
-    .badge.english{background:#052a3a; border:1px solid #0b4569; color:#c3e8ff}
-    .badge.uoi{background:#3a0e2a; border:1px solid #6f1345; color:#ffd7ea}
-    .footer{text-align:center; margin-top:3rem; color:var(--muted); opacity:0.7}
+    body{font: 16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial; background:var(--bg); color:var(--text); padding:2rem 1rem; min-height:100vh}
+    .container{max-width:var(--grid); width:100%; margin:0 auto}
+    h1{font-size:clamp(2rem,4vw+1rem,3.5rem); margin:0 0 0.5rem; text-align:center; font-weight:800; color:#0f172a}
+    .subtitle{text-align:center; color:var(--muted); margin-bottom:3rem; font-size:1.1rem}
+    .grid{display:grid; gap:2rem; margin-bottom:3rem}
+    @media(min-width:900px){.grid{grid-template-columns:repeat(auto-fit, minmax(320px, 1fr))}}
+    .card{background:#fff; border:1px solid var(--border); border-radius:16px; padding:2rem; box-shadow:0 2px 8px rgba(0,0,0,0.08); transition:all 0.3s ease; height:100%; display:flex; flex-direction:column}
+    .card:hover{transform:translateY(-4px); box-shadow:0 8px 24px rgba(0,0,0,0.12); border-color:#cbd5e1}
+    .card h2{margin:0 0 0.75rem; font-size:1.6rem; font-weight:700; color:#0f172a}
+    .card p{color:var(--muted); margin:0 0 1.25rem; line-height:1.7}
+    .card ul{margin:0 0 1.5rem; padding-left:1.5rem; color:var(--muted); flex:1}
+    .card li{margin:0.5rem 0; line-height:1.6}
+    .btn{display:inline-block; padding:0.85rem 1.75rem; border-radius:10px; text-decoration:none; font-weight:600; transition:all 0.2s; border:1px solid; text-align:center; font-size:1rem}
+    .btn.english{background:#3b82f6; border-color:#2563eb; color:#fff}
+    .btn.english:hover{background:#2563eb; transform:translateY(-1px)}
+    .btn.uoi{background:#ec4899; border-color:#db2777; color:#fff}
+    .btn.uoi:hover{background:#db2777; transform:translateY(-1px)}
+    .btn.french{background:#8b5cf6; border-color:#7c3aed; color:#fff}
+    .btn.french:hover{background:#7c3aed; transform:translateY(-1px)}
+    .badge{display:inline-block; padding:0.35rem 0.85rem; border-radius:999px; font-size:0.85rem; font-weight:600; margin-bottom:0.75rem; border:1px solid}
+    .badge.english{background:#eff6ff; border-color:#93c5fd; color:#1e40af}
+    .badge.uoi{background:#fdf2f8; border-color:#f9a8d4; color:#be185d}
+    .badge.french{background:#f5f3ff; border-color:#c4b5fd; color:#6d28d9}
+    .footer{text-align:center; padding:2rem 0; color:var(--muted); opacity:0.8; font-size:0.95rem}
+    @media print{ body{padding:0} .card{box-shadow:none; border-color:#ddd} }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>Interactive Learning Activities</h1>
-    <p class="subtitle">Select your subject to begin</p>
+    <p class="subtitle">Choose your subject to begin learning 选择你的科目开始学习</p>
 
     <div class="grid">
       <!-- English Card -->
       <div class="card">
-        <span class="badge english">English</span>
+        <span class="badge english">English 英语</span>
         <h2>Expository Writing</h2>
-        <p>Learn the difference between creative, opinion, and expository writing. Master personal vs impersonal styles and practice factual writing.</p>
+        <p>Learn the difference between creative, opinion, and expository writing. Master personal vs impersonal styles with facts!</p>
         <ul>
-          <li>Interactive sorting activities</li>
-          <li>Multiple choice questions</li>
-          <li>Gap fill exercises</li>
-          <li>Writing practice with feedback</li>
+          <li>Three types of writing 三种写作类型</li>
+          <li>Interactive sorting activities 互动分类活动</li>
+          <li>Multiple choice questions 选择题</li>
+          <li>Gap fill exercises 填空练习</li>
+          <li>Writing practice with feedback 写作练习</li>
         </ul>
         <a href="English/expository-writing.html" class="btn english">Start English Lesson →</a>
       </div>
 
       <!-- UOI Card -->
       <div class="card">
-        <span class="badge uoi">Science - UOI</span>
+        <span class="badge uoi">Science - UOI 科学</span>
         <h2>Forces and Motion</h2>
-        <p>Explore gravity, magnetism, friction, and elasticity. Understand Newton's three laws of motion through interactive experiments.</p>
+        <p>Explore the 4 main forces and Newton's 3 laws of motion through fun interactive experiments and activities!</p>
         <ul>
-          <li>4 main forces with examples</li>
-          <li>Newton's laws explained</li>
-          <li>Drag-and-drop activities</li>
-          <li>Calculations and comprehension</li>
+          <li>Gravity, magnetism, friction, elasticity 重力、磁力、摩擦力、弹性</li>
+          <li>Newton's three laws 牛顿三大定律</li>
+          <li>Drag-and-drop activities 拖放活动</li>
+          <li>Real-life examples 现实生活例子</li>
+          <li>Interactive quizzes 互动测验</li>
         </ul>
         <a href="UOI/forces-motion.html" class="btn uoi">Start Science Lesson →</a>
       </div>
 
       <!-- French Card -->
       <div class="card">
-        <span class="badge" style="background:#1e1b4b; border-color:#4f46e5; color:#c7d2fe">French A1 | 法语A1</span>
-        <h2>A1 French for Chinese Learners</h2>
-        <p>Comprehensive A1 French lesson with greetings, numbers, colors, être, avoir, -ER verbs, and more. All vocabulary presented in Chinese → English → French.</p>
+        <span class="badge french">French A1 | 法语A1</span>
+        <h2>French for Chinese Learners</h2>
+        <p>Complete A1 French lesson with greetings, numbers, colors, essential verbs. All vocabulary in Chinese → English → French!</p>
         <ul>
-          <li>Greetings and introductions</li>
-          <li>Numbers 0-20 and colors</li>
-          <li>Gender system (masculine/feminine)</li>
-          <li>Essential verbs: être, avoir, -ER verbs</li>
-          <li>Negation and question formation</li>
+          <li>Greetings and introductions 问候和介绍</li>
+          <li>Numbers 0-20 and colors 数字和颜色</li>
+          <li>Gender system (masculine/feminine) 性别系统</li>
+          <li>Verbs: être, avoir, -ER verbs 动词</li>
+          <li>Negation and questions 否定句和疑问句</li>
         </ul>
-        <a href="French/a1-french.html" class="btn" style="background:linear-gradient(180deg,#312e81,#1e1b4b); border-color:#4f46e5; color:#c7d2fe">Start French Lesson →</a>
+        <a href="French/a1-french.html" class="btn french">Start French Lesson →</a>
       </div>
     </div>
 
     <div class="footer">
-      <p>© Interactive Learning Activities - Use freely in class</p>
+      <p>© Interactive Learning Activities - Use freely in class<br>互动学习活动 - 自由用于课堂</p>
     </div>
   </div>
 </body>
 </html>
-
