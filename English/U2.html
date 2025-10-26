@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Examples vs Evidence — Interactive Lesson</title>
+  <style>
+    :root{
+      --bg:#0b1020; --card:#121a33; --muted:#94a3b8; --text:#f1f5f9; --accent:#7c3aed; --good:#16a34a; --warn:#f59e0b; --bad:#ef4444;
+      --ex:#38bdf8; --ev:#f472b6; --grid: clamp(280px, 62ch, 1100px);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0; font: 16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji"; background:radial-gradient(1200px 800px at 80% -10%, #1e293b22, transparent), var(--bg); color:var(--text)}
+    a{color:var(--accent)}
+    header{position:sticky; top:0; backdrop-filter:saturate(1.2) blur(8px); background:#0b1020cc; border-bottom:1px solid #1f2a4b; z-index:10}
+    header .wrap{display:flex; gap:1rem; align-items:center; justify-content:space-between; max-width:var(--grid); padding:0.75rem 1rem; margin-inline:auto}
+    .badge{padding:0.2rem 0.55rem; border:1px solid #243253; border-radius:999px; font-size:0.8rem; color:var(--muted)}
+    .wrap{max-width:var(--grid); margin-inline:auto; padding:1rem}
+    h1,h2,h3{line-height:1.2; margin:0.2rem 0 0.6rem}
+    h1{font-size:clamp(1.4rem,2.4vw+1rem,2.2rem)}
+    h2{font-size:1.25rem; margin-top:1.25rem}
+    p{margin:0.25rem 0 0.75rem}
+    .grid{display:grid; gap:1rem}
+    @media(min-width:900px){.grid.two{grid-template-columns:1fr 1fr}}
+    .card{background:linear-gradient(180deg,#0f1730,#0b1227); border:1px solid #203056; border-radius:16px; padding:1rem; box-shadow:0 10px 30px #0006}
+    .callout{border-left:4px solid var(--accent); padding-left:0.8rem; color:#cbd5e1}
+    .pill{display:inline-flex; align-items:center; gap:0.4rem; padding:0.2rem 0.55rem; border-radius:999px; font-size:0.85rem; border:1px solid #2a3b67}
+    .pill.ex{--c:var(--ex)}
+    .pill.ev{--c:var(--ev)}
+    .pill.ex{background:linear-gradient(180deg,#052a3a,#041e2a); border-color:#0b4569; color:#c3e8ff}
+    .pill.ev{background:linear-gradient(180deg,#3a0e2a,#29081c); border-color:#6f1345; color:#ffd7ea}
+    .kbd{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; border:1px solid #334155; padding:0.1rem 0.35rem; border-radius:6px; background:#0b142a}
+    table{width:100%; border-collapse:separate; border-spacing:0}
+    th,td{padding:0.6rem; text-align:left}
+    thead th{position:sticky; top:0; background:#0f1730; border-bottom:1px solid #213259}
+    tbody tr{border-bottom:1px solid #213259}
+    tbody tr:nth-child(odd){background:#0e162f}
+    .hint{color:var(--muted); font-size:0.9rem}
+    .btn{appearance:none; border:1px solid #27365e; border-radius:10px; background:#0c142b; color:var(--text); padding:0.55rem 0.8rem; cursor:pointer}
+    .btn.primary{border-color:#5b21b6; background:linear-gradient(180deg,#40207a,#2a1658)}
+    .btn.good{border-color:#14532d; background:linear-gradient(180deg,#164227,#0b2b19)}
+    .btn.warn{border-color:#7c2d12; background:linear-gradient(180deg,#4d1f0c,#2d1307)}
+    .row{display:flex; gap:0.6rem; flex-wrap:wrap}
+    .sr{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0)}
+    .diagram{width:100%; height:220px; background:conic-gradient(from 180deg at 50% 120%, #1a2447, #0f1730); border:1px solid #1f2a4b; border-radius:16px}
+    .dropzone{min-height:120px; border:2px dashed #2a3b67; border-radius:12px; padding:0.8rem}
+    .chip{display:inline-flex; align-items:center; gap:0.5rem; padding:0.35rem 0.6rem; border-radius:999px; background:#0e1a36; border:1px solid #293a68; cursor:grab; user-select:none}
+    .chip[data-type="EX"]{border-color:#0b4569; background:#082336}
+    .chip[data-type="EV"]{border-color:#6f1345; background:#2c0c20}
+    .zone-title{font-weight:600; color:var(--muted); margin-bottom:0.4rem}
+    .score{font-variant-numeric:tabular-nums}
+    details{border:1px solid #213259; border-radius:12px; padding:0.6rem 0.8rem; background:#0c142b}
+    details[open]{background:#0d1732}
+    details summary{cursor:pointer; font-weight:600}
+    .notice{display:grid; gap:0.25rem; background:#0b142a; border:1px dashed #2a3b67; padding:0.6rem 0.8rem; border-radius:12px; color:#cbd5e1}
+    .footer{opacity:0.7; font-size:0.9rem; padding:1rem 0}
+    @media print{ header{position:static} .btn, details{display:none} body{background:#fff; color:#000} .card{box-shadow:none; background:#fff; border-color:#ddd} .diagram{border-color:#ccc} }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="row" aria-label="breadcrumb">
+        <span class="badge">KS2–KS3 Writing</span>
+        <span class="badge">Fact vs Opinion</span>
+        <span class="badge">Examples vs Evidence</span>
+      </div>
+      <button class="btn" onclick="window.print()" aria-label="Print this lesson">Print</button>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <h1>Examples vs Evidence — Interactive Lesson</h1>
+    <p class="hint">Objective: review fact vs opinion. Learn the difference between examples and evidence. Practise using evidence to support facts.</p>
+
+    <!-- 1. Introduction -->
+    <section class="card" id="intro">
+      <h2>1) Introduction</h2>
+      <div class="grid two">
+        <div>
+          <div class="callout">
+            <p><strong>Fact</strong>: “Dogs are mammals.”</p>
+            <p><strong>Opinion</strong>: “Dogs are the best pets.”</p>
+            <p>Key point: facts can be proven. Opinions are beliefs.</p>
+          </div>
+          <details>
+            <summary>Hook — the missing evidence</summary>
+            <p>Claim: “Recycling is important. <em>For example</em>, many people recycle.”</p>
+            <p>Question: What’s missing?</p>
+            <p>Guide: <span class="pill ex">Example shows</span>; <span class="pill ev">Evidence proves</span>.</p>
+          </details>
+        </div>
+        <div>
+          <svg class="diagram" role="img" aria-label="Diagram: Example shows, Evidence proves" viewBox="0 0 800 260">
+            <defs>
+              <filter id="s" x="-20%" y="-20%" width="140%" height="140%">
+                <feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#0008"/>
+              </filter>
+            </defs>
+            <rect x="20" y="30" width="350" height="160" rx="16" fill="#082336" stroke="#0b4569" filter="url(#s)"/>
+            <rect x="430" y="30" width="350" height="160" rx="16" fill="#2c0c20" stroke="#6f1345" filter="url(#s)"/>
+            <text x="195" y="65" text-anchor="middle" fill="#c3e8ff" font-size="20" font-weight="700">Example</text>
+            <text x="605" y="65" text-anchor="middle" fill="#ffd7ea" font-size="20" font-weight="700">Evidence</text>
+            <text x="195" y="105" text-anchor="middle" fill="#9bd7ff" font-size="16">Shows what you mean</text>
+            <text x="605" y="105" text-anchor="middle" fill="#ffc6dc" font-size="16">Proves your point</text>
+            <g>
+              <path d="M 370 110 C 400 110 410 110 430 110" stroke="#93c5fd" stroke-width="2" fill="none" marker-end="url(#arrowEx)"/>
+              <path d="M 430 140 C 400 140 390 140 370 140" stroke="#fda4af" stroke-width="2" fill="none" marker-end="url(#arrowEv)"/>
+            </g>
+            <defs>
+              <marker id="arrowEx" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto-start-reverse">
+                <path d="M0,0 L0,6 L6,3 z" fill="#93c5fd"/>
+              </marker>
+              <marker id="arrowEv" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto-start-reverse">
+                <path d="M0,0 L0,6 L6,3 z" fill="#fda4af"/>
+              </marker>
+            </defs>
+            <text x="400" y="200" text-anchor="middle" fill="#cbd5e1" font-size="14">Use both: Example = picture · Evidence = proof</text>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Presentation -->
+    <section class="card" id="presentation">
+      <h2>2) Presentation</h2>
+      <div class="grid two">
+        <div>
+          <h3>Definitions</h3>
+          <table aria-label="Definitions">
+            <thead>
+              <tr><th>Type</th><th>Purpose</th><th>Guiding question</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="pill ex">Example</span></td>
+                <td>Shows what you mean</td>
+                <td>“Like what?”</td>
+              </tr>
+              <tr>
+                <td><span class="pill ev">Evidence</span></td>
+                <td>Proves your point</td>
+                <td>“How do you know?”</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <details>
+            <summary>Model examples</summary>
+            <ul>
+              <li><strong>Example</strong>: “My friend recycles bottles.”</li>
+              <li><strong>Evidence</strong>: “Studies show recycling cuts landfill waste by 35%.”</li>
+            </ul>
+          </details>
+        </div>
+        <div>
+          <h3>Pairings</h3>
+          <table aria-label="Pairings">
+            <thead>
+              <tr><th>Example</th><th>Evidence</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>My school has a garden</td>
+                <td>Studies show gardens improve nutrition by 20%</td>
+              </tr>
+              <tr>
+                <td>Some people ride bikes</td>
+                <td>City data shows bike commuting reduces traffic by 15%</td>
+              </tr>
+              <tr>
+                <td>Animals live in rainforests</td>
+                <td>Scientists have identified millions of species there</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="notice" role="note">
+            <div>Think–Pair–Share: “Exercise is good for children.”</div>
+            <div>Write one <span class="pill ex">example</span> and one <span class="pill ev">evidence</span>.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Practice: Sort EX vs EV -->
+    <section class="card" id="practice">
+      <h2>3) Practice — Sort the statements</h2>
+      <p class="hint">Drag each chip to <span class="pill ex">EX</span> or <span class="pill ev">EV</span>. Then check answers.</p>
+
+      <div class="grid two" aria-label="Drag and drop classification">
+        <div>
+          <div class="zone-title">Chips</div>
+          <div id="chips" class="dropzone" aria-label="pool" aria-dropeffect="move"></div>
+          <div class="row" style="margin-top:0.6rem">
+            <button class="btn" onclick="resetChips()">Reset</button>
+            <button class="btn primary" onclick="checkChips()">Check answers</button>
+            <div aria-live="polite" id="score" class="score" style="margin-left:auto"></div>
+          </div>
+        </div>
+        <div>
+          <div class="grid two">
+            <div>
+              <div class="zone-title"><span class="pill ex">EX</span> Example</div>
+              <div id="zone-ex" class="dropzone" aria-label="Example bin"></div>
+            </div>
+            <div>
+              <div class="zone-title"><span class="pill ev">EV</span> Evidence</div>
+              <div id="zone-ev" class="dropzone" aria-label="Evidence bin"></div>
+            </div>
+          </div>
+          <details style="margin-top:0.6rem">
+            <summary>Show key</summary>
+            <ul>
+              <li>My grandmother walks daily → <strong>EX</strong></li>
+              <li>Research shows walking helps the heart → <strong>EV</strong></li>
+              <li>Our school library has many books → <strong>EX</strong></li>
+              <li>Reading improves vocabulary by 50% → <strong>EV</strong></li>
+              <li>Some students bring lunch → <strong>EX</strong></li>
+              <li>Home meals have 25% less sugar → <strong>EV</strong></li>
+            </ul>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3b. Partner task prompt -->
+    <section class="card" id="partner">
+      <h2>Partner task</h2>
+      <p>Topic: <strong>Healthy eating</strong>. A writes an <span class="pill ex">example</span>. B writes <span class="pill ev">evidence</span>.</p>
+      <div class="grid two">
+        <label class="card" style="display:block">
+          <span class="hint">Example</span>
+          <input id="partnerEx" class="input" style="width:100%; padding:0.6rem; border-radius:10px; border:1px solid #23345a; background:#0c142b; color:var(--text)" placeholder="For example, …"/>
+        </label>
+        <label class="card" style="display:block">
+          <span class="hint">Evidence</span>
+          <input id="partnerEv" class="input" style="width:100%; padding:0.6rem; border-radius:10px; border:1px solid #23345a; background:#0c142b; color:var(--text)" placeholder="Research shows …"/>
+        </label>
+      </div>
+      <div class="row" style="margin-top:0.6rem">
+        <button class="btn" onclick="pairToNotes()">Add to notes</button>
+        <span id="pairMsg" class="hint" aria-live="polite"></span>
+      </div>
+    </section>
+
+    <!-- 4. Production: guided paragraph builder -->
+    <section class="card" id="production">
+      <h2>4) Production — Write a paragraph</h2>
+      <p>Choose a topic and complete the frame. The checker verifies structure, not truth.</p>
+
+      <div class="row" style="margin-bottom:0.6rem">
+        <label>Topic:
+          <select id="topic" style="margin-left:0.4rem; padding:0.4rem; border-radius:8px; background:#0c142b; border:1px solid #223359; color:var(--text)">
+            <option>Reading</option>
+            <option>Outdoor play</option>
+            <option>Recycling</option>
+            <option>Music</option>
+          </select>
+        </label>
+        <button class="btn" onclick="insertFrames()">Insert sentence frames</button>
+        <button class="btn primary" onclick="checkParagraph()">Check structure</button>
+        <button class="btn good" onclick="copyParagraph()">Copy paragraph</button>
+      </div>
+
+      <textarea id="para" rows="8" style="width:100%; padding:0.8rem; border-radius:12px; background:#0b142a; color:var(--text); border:1px solid #223359" placeholder="Type your paragraph here…"></textarea>
+
+      <div class="grid two" style="margin-top:0.6rem">
+        <div class="notice">
+          <div><strong>Checklist</strong></div>
+          <ul id="checks">
+            <li>Topic sentence present</li>
+            <li>One <span class="pill ex">example</span> using “For example”</li>
+            <li>One <span class="pill ev">evidence</span> using “Research shows”</li>
+            <li>Concluding sentence using “Therefore”</li>
+          </ul>
+        </div>
+        <details open>
+          <summary>Sentence frames</summary>
+          <p id="frames">Topic sentence: <em>[Your point]</em><br>For example, <em>[show it]</em>.<br>Research shows <em>[proof or data]</em>.<br>Therefore, <em>[sum up]</em>.</p>
+        </details>
+      </div>
+
+      <div id="feedback" class="hint" style="margin-top:0.6rem" aria-live="polite"></div>
+    </section>
+
+    <!-- 5. Summary -->
+    <section class="card" id="summary">
+      <h2>5) Summary</h2>
+      <ul>
+        <li>Example shows. Evidence proves.</li>
+        <li>Use both to make writing engaging and convincing.</li>
+        <li>Next: write strong expository paragraphs.</li>
+      </ul>
+    </section>
+
+    <!-- Notes area -->
+    <section class="card" id="notes">
+      <h2>Lesson notes</h2>
+      <p class="hint">Captured examples and evidence appear here.</p>
+      <table id="notesTable">
+        <thead><tr><th>Topic</th><th>Example</th><th>Evidence</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <div class="footer">© Teacher version. Use freely in class.</div>
+  </main>
+
+<script>
+  // --- Practice chips ---
+  const ITEMS = [
+    {text:"My grandmother walks daily", type:"EX"},
+    {text:"Research shows walking helps the heart", type:"EV"},
+    {text:"Our school library has many books", type:"EX"},
+    {text:"Reading improves vocabulary by 50%", type:"EV"},
+    {text:"Some students bring lunch", type:"EX"},
+    {text:"Home meals have 25% less sugar", type:"EV"},
+  ];
+
+  const chipsEl = document.getElementById('chips');
+  const zoneEx = document.getElementById('zone-ex');
+  const zoneEv = document.getElementById('zone-ev');
+  const scoreEl = document.getElementById('score');
+
+  function makeChip(item, idx){
+    const el = document.createElement('div');
+    el.className = 'chip';
+    el.textContent = item.text;
+    el.setAttribute('draggable','true');
+    el.dataset.idx = idx;
+    el.dataset.type = item.type;
+    el.addEventListener('dragstart', e=>{
+      e.dataTransfer.setData('text/plain', idx);
+    });
+    return el;
+  }
+
+  function setupDropzone(zone){
+    zone.addEventListener('dragover', e=>{ e.preventDefault(); zone.style.outline='2px solid #475569';});
+    zone.addEventListener('dragleave', ()=>{ zone.style.outline='none';});
+    zone.addEventListener('drop', e=>{
+      e.preventDefault(); zone.style.outline='none';
+      const idx = e.dataTransfer.getData('text/plain');
+      const chip = document.querySelector(`.chip[data-idx="${idx}"]`);
+      zone.appendChild(chip);
+    });
+  }
+
+  function resetChips(){
+    chipsEl.innerHTML=''; zoneEx.innerHTML=''; zoneEv.innerHTML=''; scoreEl.textContent='';
+    ITEMS.forEach((it,i)=> chipsEl.appendChild(makeChip(it,i)) );
+  }
+
+  function checkChips(){
+    let correct = 0, total = ITEMS.length;
+    zoneEx.querySelectorAll('.chip').forEach(ch=>{ if(ch.dataset.type==='EX') correct++; ch.style.borderColor = ch.dataset.type==='EX' ? '#16a34a' : '#ef4444'; });
+    zoneEv.querySelectorAll('.chip').forEach(ch=>{ if(ch.dataset.type==='EV') correct++; ch.style.borderColor = ch.dataset.type==='EV' ? '#16a34a' : '#ef4444'; });
+    scoreEl.textContent = `Score: ${correct} / ${total}`;
+  }
+
+  setupDropzone(chipsEl); setupDropzone(zoneEx); setupDropzone(zoneEv); resetChips();
+
+  // --- Partner task to notes ---
+  function pairToNotes(){
+    const ex = document.getElementById('partnerEx').value.trim();
+    const ev = document.getElementById('partnerEv').value.trim();
+    const topic = 'Healthy eating';
+    const msg = document.getElementById('pairMsg');
+    if(!ex || !ev){ msg.textContent = 'Enter both fields.'; return; }
+    const tbody = document.querySelector('#notesTable tbody');
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${topic}</td><td>${escapeHtml(ex)}</td><td>${escapeHtml(ev)}</td>`;
+    tbody.appendChild(tr);
+    document.getElementById('partnerEx').value='';
+    document.getElementById('partnerEv').value='';
+    msg.textContent = 'Added to notes.';
+  }
+
+  // --- Paragraph builder ---
+  function insertFrames(){
+    const topic = document.getElementById('topic').value;
+    const t = ` ${topic.toLowerCase()}`;
+    const template = `
+${cap(topic)} helps pupils learn and thrive.
+For example, [write a showing example of${t}].
+Research shows [insert a source, e.g., a study or data about${t}].
+Therefore, [sum up why this matters for children].`;
+    document.getElementById('para').value = template.trim();
+  }
+
+  function checkParagraph(){
+    const text = document.getElementById('para').value.trim();
+    let okTopic = /^(\w|\[)/m.test(text);
+    let okEx = /\bFor example\b/i.test(text);
+    let okEv = /\bResearch shows\b/i.test(text);
+    let okConc = /\bTherefore\b/i.test(text);
+
+    const list = document.getElementById('checks').querySelectorAll('li');
+    mark(list[0], okTopic); mark(list[1], okEx); mark(list[2], okEv); mark(list[3], okConc);
+
+    const missing = [!okTopic&&'topic', !okEx&&'example', !okEv&&'evidence', !okConc&&'conclusion'].filter(Boolean);
+    const fb = document.getElementById('feedback');
+    if(missing.length===0){ fb.textContent = 'Structure complete. Add a second piece of evidence for a challenge.'; }
+    else{ fb.textContent = 'Add: ' + missing.join(', ') + '.'; }
+  }
+
+  function copyParagraph(){
+    const text = document.getElementById('para').value;
+    navigator.clipboard.writeText(text).then(()=>{ document.getElementById('feedback').textContent='Paragraph copied.'; });
+  }
+
+  function mark(li, ok){
+    li.style.listStyle = 'none';
+    li.textContent = li.textContent.replace(/^✅\s|^❌\s|^/, '');
+    li.textContent = (ok ? '✅ ' : '❌ ') + li.textContent;
+    li.style.color = ok ? '#86efac' : '#fca5a5';
+  }
+
+  function cap(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
+  function escapeHtml(s){ return s.replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[c])); }
+</script>
+</body>
+</html>

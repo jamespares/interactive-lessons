@@ -6,61 +6,70 @@
   <title>Expository Writing — Interactive Lesson</title>
   <style>
     :root{
-      --bg:#0b1020; --card:#121a33; --muted:#94a3b8; --text:#f1f5f9; --accent:#7c3aed; --good:#16a34a; --warn:#f59e0b; --bad:#ef4444;
-      --creative:#f472b6; --opinion:#fbbf24; --expo:#38bdf8; --grid: clamp(280px, 62ch, 1100px);
+      --bg:#f8fafc; --card:#ffffff; --muted:#64748b; --text:#1e293b; --accent:#7c3aed; --good:#16a34a; --warn:#f59e0b; --bad:#ef4444;
+      --creative:#ec4899; --opinion:#f59e0b; --expo:#3b82f6; --grid: clamp(280px, 62ch, 1100px);
+      --border:#e2e8f0; --hover:#f1f5f9;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
-    body{margin:0; font: 16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji"; background:radial-gradient(1200px 800px at 80% -10%, #1e293b22, transparent), var(--bg); color:var(--text)}
+    body{margin:0; font: 16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji"; background:var(--bg); color:var(--text)}
     a{color:var(--accent)}
-    header{position:sticky; top:0; backdrop-filter:saturate(1.2) blur(8px); background:#0b1020cc; border-bottom:1px solid #1f2a4b; z-index:10}
-    header .wrap{display:flex; gap:1rem; align-items:center; justify-content:space-between; max-width:var(--grid); padding:0.75rem 1rem; margin-inline:auto}
-    .badge{padding:0.2rem 0.55rem; border:1px solid #243253; border-radius:999px; font-size:0.8rem; color:var(--muted)}
-    .wrap{max-width:var(--grid); margin-inline:auto; padding:1rem}
-    h1,h2,h3{line-height:1.2; margin:0.2rem 0 0.6rem}
-    h1{font-size:clamp(1.4rem,2.4vw+1rem,2.2rem)}
-    h2{font-size:1.25rem; margin-top:2rem}
+    header{position:sticky; top:0; background:#fff; border-bottom:2px solid var(--border); z-index:10; box-shadow:0 1px 3px rgba(0,0,0,0.05)}
+    header .wrap{display:flex; gap:1rem; align-items:center; justify-content:space-between; max-width:var(--grid); padding:1rem 1.5rem; margin-inline:auto}
+    .badge{padding:0.35rem 0.75rem; border:1px solid var(--border); border-radius:999px; font-size:0.8rem; color:var(--muted); background:#fff; font-weight:500}
+    .wrap{max-width:var(--grid); margin-inline:auto; padding:1.5rem}
+    h1,h2,h3{line-height:1.2; margin:0.2rem 0 0.6rem; color:#0f172a}
+    h1{font-size:clamp(1.6rem,2.4vw+1rem,2.4rem); font-weight:700}
+    h2{font-size:1.4rem; margin-top:2.5rem; font-weight:700; color:#1e293b}
+    h3{font-size:1.1rem; font-weight:600}
     p{margin:0.25rem 0 0.75rem}
-    .grid{display:grid; gap:1rem}
+    .grid{display:grid; gap:1.5rem}
     @media(min-width:900px){.grid.two{grid-template-columns:1fr 1fr}}
     @media(min-width:900px){.grid.three{grid-template-columns:1fr 1fr 1fr}}
-    .card{background:linear-gradient(180deg,#0f1730,#0b1227); border:1px solid #203056; border-radius:16px; padding:1.25rem; box-shadow:0 10px 30px #0006; margin-bottom:1.5rem}
-    .callout{border-left:4px solid var(--accent); padding-left:0.8rem; color:#cbd5e1; margin:0.75rem 0}
-    .pill{display:inline-flex; align-items:center; gap:0.4rem; padding:0.2rem 0.55rem; border-radius:999px; font-size:0.85rem; border:1px solid #2a3b67; font-weight:600}
-    .pill.creative{background:linear-gradient(180deg,#3a0e2a,#29081c); border-color:#6f1345; color:#ffd7ea}
-    .pill.opinion{background:linear-gradient(180deg,#3a2e0e,#2a1f08); border-color:#78350f; color:#fef3c7}
-    .pill.expo{background:linear-gradient(180deg,#052a3a,#041e2a); border-color:#0b4569; color:#c3e8ff}
-    table{width:100%; border-collapse:separate; border-spacing:0; margin:1rem 0}
-    th,td{padding:0.7rem; text-align:left}
-    thead th{position:sticky; top:0; background:#0f1730; border-bottom:1px solid #213259; font-weight:700}
-    tbody tr{border-bottom:1px solid #213259}
-    tbody tr:nth-child(odd){background:#0e162f}
+    .card{background:#fff; border:1px solid var(--border); border-radius:12px; padding:1.75rem; box-shadow:0 1px 3px rgba(0,0,0,0.08); margin-bottom:2rem}
+    .callout{border-left:4px solid var(--accent); padding:1rem 1.25rem; background:#f8fafc; border-radius:0 8px 8px 0; margin:1rem 0}
+    .pill{display:inline-flex; align-items:center; gap:0.4rem; padding:0.3rem 0.7rem; border-radius:999px; font-size:0.85rem; font-weight:600; border:1px solid}
+    .pill.creative{background:#fdf2f8; border-color:#f9a8d4; color:#be185d}
+    .pill.opinion{background:#fffbeb; border-color:#fcd34d; color:#92400e}
+    .pill.expo{background:#eff6ff; border-color:#93c5fd; color:#1e40af}
+    table{width:100%; border-collapse:separate; border-spacing:0; margin:1rem 0; border:1px solid var(--border); border-radius:8px; overflow:hidden}
+    th,td{padding:0.75rem 1rem; text-align:left}
+    thead th{background:#f8fafc; border-bottom:2px solid var(--border); font-weight:600; color:#475569}
+    tbody tr{border-bottom:1px solid var(--border)}
+    tbody tr:last-child{border-bottom:none}
+    tbody tr:nth-child(odd){background:#fafafa}
     .hint{color:var(--muted); font-size:0.9rem}
-    .btn{appearance:none; border:1px solid #27365e; border-radius:10px; background:#0c142b; color:var(--text); padding:0.55rem 0.8rem; cursor:pointer; font-size:0.95rem}
-    .btn:hover{background:#0f1730}
-    .btn.primary{border-color:#5b21b6; background:linear-gradient(180deg,#40207a,#2a1658)}
-    .btn.good{border-color:#14532d; background:linear-gradient(180deg,#164227,#0b2b19)}
+    .btn{appearance:none; border:1px solid var(--border); border-radius:8px; background:#fff; color:var(--text); padding:0.6rem 1rem; cursor:pointer; font-size:0.95rem; font-weight:500; transition:all 0.2s}
+    .btn:hover{background:var(--hover); border-color:#cbd5e1}
+    .btn.primary{border-color:#7c3aed; background:#7c3aed; color:#fff}
+    .btn.primary:hover{background:#6d28d9}
+    .btn.good{border-color:#16a34a; background:#16a34a; color:#fff}
+    .btn.good:hover{background:#15803d}
     .row{display:flex; gap:0.6rem; flex-wrap:wrap; align-items:center}
-    .dropzone{min-height:100px; border:2px dashed #2a3b67; border-radius:12px; padding:0.8rem; transition:all 0.2s}
-    .chip{display:inline-flex; align-items:center; gap:0.5rem; padding:0.4rem 0.7rem; border-radius:999px; background:#0e1a36; border:1px solid #293a68; cursor:grab; user-select:none; margin:0.25rem}
-    .chip[data-type="creative"]{border-color:#6f1345; background:#2c0c20}
-    .chip[data-type="opinion"]{border-color:#78350f; background:#2a1f08}
-    .chip[data-type="expo"]{border-color:#0b4569; background:#082336}
-    .zone-title{font-weight:600; color:var(--muted); margin-bottom:0.4rem; font-size:0.95rem}
+    .dropzone{min-height:100px; border:2px dashed #cbd5e1; border-radius:12px; padding:1rem; transition:all 0.2s; background:#fafafa}
+    .chip{display:inline-flex; align-items:center; gap:0.5rem; padding:0.5rem 0.9rem; border-radius:999px; background:#fff; border:1px solid #cbd5e1; cursor:grab; user-select:none; margin:0.3rem; box-shadow:0 1px 2px rgba(0,0,0,0.05)}
+    .chip[data-type="creative"]{border-color:#f9a8d4; background:#fdf2f8; color:#be185d}
+    .chip[data-type="opinion"]{border-color:#fcd34d; background:#fffbeb; color:#92400e}
+    .chip[data-type="expo"]{border-color:#93c5fd; background:#eff6ff; color:#1e40af}
+    .zone-title{font-weight:600; color:#475569; margin-bottom:0.6rem; font-size:0.95rem}
     .score{font-variant-numeric:tabular-nums; font-weight:700; color:var(--good)}
-    details{border:1px solid #213259; border-radius:12px; padding:0.6rem 0.8rem; background:#0c142b; margin:0.5rem 0}
-    details[open]{background:#0d1732}
-    details summary{cursor:pointer; font-weight:600}
-    .notice{display:grid; gap:0.25rem; background:#0b142a; border:1px dashed #2a3b67; padding:0.8rem 1rem; border-radius:12px; color:#cbd5e1}
-    .radio-group{display:grid; gap:0.5rem; margin:0.5rem 0}
-    .radio-option{display:flex; align-items:center; gap:0.6rem; padding:0.6rem; border:1px solid #223359; border-radius:10px; background:#0b142a; cursor:pointer; transition:all 0.2s}
-    .radio-option:hover{background:#0d1732; border-color:#2a3b67}
+    details{border:1px solid var(--border); border-radius:8px; padding:0.75rem 1rem; background:#fff; margin:0.75rem 0}
+    details[open]{background:#fafafa}
+    details summary{cursor:pointer; font-weight:600; color:#475569}
+    .notice{background:#f0f9ff; border:1px solid #bae6fd; padding:1rem 1.25rem; border-radius:8px; color:#0c4a6e}
+    .radio-group{display:grid; gap:0.6rem; margin:0.75rem 0}
+    .radio-option{display:flex; align-items:center; gap:0.6rem; padding:0.75rem; border:1px solid var(--border); border-radius:8px; background:#fff; cursor:pointer; transition:all 0.2s}
+    .radio-option:hover{background:var(--hover); border-color:#cbd5e1}
     .radio-option input{cursor:pointer}
-    .radio-option.correct{border-color:var(--good); background:#0a221a}
-    .radio-option.incorrect{border-color:var(--bad); background:#2a0f0f}
-    textarea, input[type="text"]{width:100%; padding:0.8rem; border-radius:12px; background:#0b142a; color:var(--text); border:1px solid #223359; font:inherit; resize:vertical}
-    .example-box{background:#0b142a; border:1px solid #223359; padding:1rem; border-radius:12px; margin:0.75rem 0}
-    .footer{opacity:0.7; font-size:0.9rem; padding:2rem 0; text-align:center}
+    .radio-option.correct{border-color:var(--good); background:#f0fdf4}
+    .radio-option.incorrect{border-color:var(--bad); background:#fef2f2}
+    textarea, input[type="text"]{width:100%; padding:0.75rem; border-radius:8px; background:#fff; color:var(--text); border:1px solid var(--border); font:inherit; resize:vertical}
+    textarea:focus, input[type="text"]:focus{outline:none; border-color:#7c3aed; box-shadow:0 0 0 3px rgba(124,58,237,0.1)}
+    .example-box{background:#fafafa; border:1px solid var(--border); padding:1.25rem; border-radius:8px; margin:0.75rem 0}
+    .lesson-image{width:100%; max-width:600px; height:auto; border-radius:8px; border:1px solid var(--border); margin:1rem 0; display:block}
+    .img-container{text-align:center; padding:1rem; background:#fafafa; border-radius:8px; border:1px dashed #cbd5e1}
+    .img-placeholder-text{color:var(--muted); font-size:0.9rem; font-style:italic}
+    .footer{opacity:0.7; font-size:0.9rem; padding:2rem 0; text-align:center; color:var(--muted)}
     @media print{ header{position:static} .btn, details{display:none} body{background:#fff; color:#000} .card{box-shadow:none; background:#fff; border-color:#ddd} }
   </style>
 </head>
@@ -138,7 +147,16 @@
           </div>
         </div>
         <div>
-          <h3>👥 Use "It, they, people" (Impersonal) 用"它，他们，人们"</h3>
+          <div class="img-container">
+            <img src="assets/personal-expository.png" alt="Personal expository writing example" class="lesson-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+            <p class="img-placeholder-text" style="display:none">📸 Add image: personal-expository.png<br>Visual showing when to use "I, we, my" for personal expository writing</p>
+          </div>
+          
+          <div class="img-container" style="margin-top:1rem">
+            <img src="assets/impersonal-expository.png" alt="Impersonal expository writing example" class="lesson-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+            <p class="img-placeholder-text" style="display:none">📸 Add image: impersonal-expository.png<br>Visual showing when to use "it, they, people" for general facts</p>
+          </div>
+        </div>
           <div class="example-box">
             <p><strong>When? 什么时候?</strong><br>When the question asks about science, history, or general information</p>
             <p class="hint">当问题是关于科学、历史或一般信息时</p>
