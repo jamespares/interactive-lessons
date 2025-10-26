@@ -1,0 +1,11 @@
+# Ignore markdown files except README
+*.md
+!README.md
+
+# Ignore assets folders for now (until images are added)
+assets/
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+

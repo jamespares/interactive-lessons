@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Forces and Motion — Interactive Science Lesson</title>
+  <style>
+    :root{
+      --bg:#0b1020; --card:#121a33; --muted:#94a3b8; --text:#f1f5f9; --accent:#7c3aed; --good:#16a34a; --warn:#f59e0b; --bad:#ef4444;
+      --gravity:#c084fc; --magnet:#f472b6; --friction:#fb923c; --elastic:#a3e635; --grid: clamp(280px, 62ch, 1100px);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0; font: 16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji"; background:radial-gradient(1200px 800px at 80% -10%, #1e293b22, transparent), var(--bg); color:var(--text)}
+    a{color:var(--accent)}
+    header{position:sticky; top:0; backdrop-filter:saturate(1.2) blur(8px); background:#0b1020cc; border-bottom:1px solid #1f2a4b; z-index:10}
+    header .wrap{display:flex; gap:1rem; align-items:center; justify-content:space-between; max-width:var(--grid); padding:0.75rem 1rem; margin-inline:auto}
+    .badge{padding:0.2rem 0.55rem; border:1px solid #243253; border-radius:999px; font-size:0.8rem; color:var(--muted)}
+    .wrap{max-width:var(--grid); margin-inline:auto; padding:1rem}
+    h1,h2,h3{line-height:1.2; margin:0.2rem 0 0.6rem}
+    h1{font-size:clamp(1.4rem,2.4vw+1rem,2.2rem)}
+    h2{font-size:1.25rem; margin-top:2.5rem}
+    h3{font-size:1.1rem; margin-top:1rem}
+    p{margin:0.25rem 0 0.75rem}
+    .grid{display:grid; gap:1rem}
+    @media(min-width:900px){.grid.two{grid-template-columns:1fr 1fr}}
+    @media(min-width:900px){.grid.three{grid-template-columns:1fr 1fr 1fr}}
+    @media(min-width:900px){.grid.four{grid-template-columns:1fr 1fr 1fr 1fr}}
+    .card{background:linear-gradient(180deg,#0f1730,#0b1227); border:1px solid #203056; border-radius:16px; padding:1.25rem; box-shadow:0 10px 30px #0006; margin-bottom:2rem}
+    .callout{border-left:4px solid var(--accent); padding-left:0.8rem; color:#cbd5e1; margin:1rem 0}
+    .pill{display:inline-flex; align-items:center; gap:0.4rem; padding:0.25rem 0.6rem; border-radius:999px; font-size:0.85rem; border:1px solid #2a3b67; font-weight:600}
+    .pill.gravity{background:linear-gradient(180deg,#2d1b52,#1f1338); border-color:#6b21a8; color:#e9d5ff}
+    .pill.magnet{background:linear-gradient(180deg,#3a0e2a,#29081c); border-color:#6f1345; color:#ffd7ea}
+    .pill.friction{background:linear-gradient(180deg,#3a2008,#2a1606); border-color:#7c2d12; color:#fed7aa}
+    .pill.elastic{background:linear-gradient(180deg,#1e2a0e,#141f08); border-color:#4d7c0f; color:#d9f99d}
+    table{width:100%; border-collapse:separate; border-spacing:0; margin:1rem 0}
+    th,td{padding:0.7rem; text-align:left}
+    thead th{position:sticky; top:0; background:#0f1730; border-bottom:1px solid #213259; font-weight:700}
+    tbody tr{border-bottom:1px solid #213259}
+    tbody tr:nth-child(odd){background:#0e162f}
+    .hint{color:var(--muted); font-size:0.9rem}
+    .btn{appearance:none; border:1px solid #27365e; border-radius:10px; background:#0c142b; color:var(--text); padding:0.55rem 0.8rem; cursor:pointer; font-size:0.95rem}
+    .btn:hover{background:#0f1730}
+    .btn.primary{border-color:#5b21b6; background:linear-gradient(180deg,#40207a,#2a1658)}
+    .btn.good{border-color:#14532d; background:linear-gradient(180deg,#164227,#0b2b19)}
+    .row{display:flex; gap:0.6rem; flex-wrap:wrap; align-items:center}
+    .dropzone{min-height:100px; border:2px dashed #2a3b67; border-radius:12px; padding:0.8rem; transition:all 0.2s}
+    .chip{display:inline-flex; align-items:center; gap:0.5rem; padding:0.4rem 0.7rem; border-radius:999px; background:#0e1a36; border:1px solid #293a68; cursor:grab; user-select:none; margin:0.25rem; font-size:0.9rem}
+    .chip[data-type="gravity"]{border-color:#6b21a8; background:#1f1338}
+    .chip[data-type="magnet"]{border-color:#6f1345; background:#29081c}
+    .chip[data-type="friction"]{border-color:#7c2d12; background:#2a1606}
+    .chip[data-type="elastic"]{border-color:#4d7c0f; background:#141f08}
+    .zone-title{font-weight:600; color:var(--muted); margin-bottom:0.4rem; font-size:0.95rem}
+    .score{font-variant-numeric:tabular-nums; font-weight:700; color:var(--good)}
+    details{border:1px solid #213259; border-radius:12px; padding:0.6rem 0.8rem; background:#0c142b; margin:0.5rem 0}
+    details[open]{background:#0d1732}
+    details summary{cursor:pointer; font-weight:600}
+    .notice{display:grid; gap:0.25rem; background:#0b142a; border:1px dashed #2a3b67; padding:0.8rem 1rem; border-radius:12px; color:#cbd5e1}
+    .radio-group{display:grid; gap:0.5rem; margin:0.5rem 0}
+    .radio-option{display:flex; align-items:center; gap:0.6rem; padding:0.6rem; border:1px solid #223359; border-radius:10px; background:#0b142a; cursor:pointer; transition:all 0.2s}
+    .radio-option:hover{background:#0d1732; border-color:#2a3b67}
+    .radio-option input{cursor:pointer}
+    .radio-option.correct{border-color:var(--good); background:#0a221a}
+    .radio-option.incorrect{border-color:var(--bad); background:#2a0f0f}
+    textarea, input[type="text"]{width:100%; padding:0.8rem; border-radius:12px; background:#0b142a; color:var(--text); border:1px solid #223359; font:inherit; resize:vertical}
+    .example-box{background:#0b142a; border:1px solid #223359; padding:1rem; border-radius:12px; margin:0.75rem 0}
+    .img-placeholder{width:100%; height:280px; background:linear-gradient(135deg, #1e293b, #0f172a); border:2px dashed #334155; border-radius:12px; display:flex; align-items:center; justify-content:center; color:#64748b; font-size:0.9rem; margin:1rem 0}
+    .video-placeholder{width:100%; height:320px; background:linear-gradient(135deg, #1e293b, #0f172a); border:2px dashed #334155; border-radius:12px; display:flex; flex-direction:column; gap:0.5rem; align-items:center; justify-content:center; color:#64748b; font-size:0.9rem; margin:1rem 0}
+    .law-box{border-left:4px solid; padding:1rem; border-radius:8px; background:#0d1732; margin:1rem 0}
+    .law-box.law1{border-color:#c084fc}
+    .law-box.law2{border-color:#f472b6}
+    .law-box.law3{border-color:#fb923c}
+    .formula{font-family:ui-monospace, SFMono-Regular, Menlo, monospace; background:#0b142a; padding:0.4rem 0.8rem; border-radius:8px; border:1px solid #223359; display:inline-block; margin:0.5rem 0}
+    .footer{opacity:0.7; font-size:0.9rem; padding:2rem 0; text-align:center}
+    @media print{ header{position:static} .btn, details{display:none} body{background:#fff; color:#000} .card{box-shadow:none; background:#fff; border-color:#ddd} }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="row" aria-label="breadcrumb">
+        <span class="badge">KS2–KS3 Science</span>
+        <span class="badge">Forces and Motion</span>
+        <span class="badge">Unit 2</span>
+      </div>
+      <button class="btn" onclick="window.print()" aria-label="Print this lesson">Print</button>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <h1>Forces and Motion — Interactive Science Lesson</h1>
+    <p class="hint">Objective: Understand the four main forces (gravity, magnetism, friction, elasticity) and Newton's three laws of motion through interactive activities and experiments.</p>
+
+    <!-- 1. Introduction: What is a Force? -->
+    <section class="card" id="intro">
+      <h2>1) What is a Force?</h2>
+      <div class="grid two">
+        <div>
+          <div class="callout">
+            <p><strong>Force:</strong> A push or pull that can change an object's motion, shape, or direction.</p>
+            <p>Forces are measured in <strong>Newtons (N)</strong>, named after Sir Isaac Newton.</p>
+          </div>
+          <p>Forces are all around us:</p>
+          <ul>
+            <li>When you kick a ball, you apply a force</li>
+            <li>When you sit on a chair, gravity pulls you down</li>
+            <li>When you rub your hands together, friction creates heat</li>
+            <li>When you stretch a rubber band, elastic force pulls it back</li>
+          </ul>
+        </div>
+        <div>
+          <div class="img-placeholder">
+            [IMAGE: Diagram showing different forces acting on objects - gravity pulling ball down, friction slowing wheel, magnetism attracting metal, elastic force in spring]
+          </div>
+        </div>
+      </div>
+
+      <h3>The Four Main Forces We'll Study:</h3>
+      <div class="grid four">
+        <div class="example-box">
+          <span class="pill gravity">Gravity</span>
+          <p>Pulls objects toward Earth</p>
+        </div>
+        <div class="example-box">
+          <span class="pill magnet">Magnetism</span>
+          <p>Attracts or repels magnetic materials</p>
+        </div>
+        <div class="example-box">
+          <span class="pill friction">Friction</span>
+          <p>Slows down moving objects</p>
+        </div>
+        <div class="example-box">
+          <span class="pill elastic">Elasticity</span>
+          <p>Returns objects to original shape</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Gravity -->
+    <section class="card" id="gravity">
+      <h2>2) Gravity</h2>
+      <div class="grid two">
+        <div>
+          <h3>What is Gravity?</h3>
+          <p>Gravity is a force that pulls objects toward each other. Earth's gravity pulls everything toward its center. This is why:</p>
+          <ul>
+            <li>Objects fall to the ground when dropped</li>
+            <li>We can walk on the ground instead of floating</li>
+            <li>Water flows downhill</li>
+            <li>The Moon orbits around Earth</li>
+          </ul>
+          
+          <div class="callout">
+            <p><strong>Key Facts:</strong></p>
+            <ul>
+              <li>Gravity acts on ALL objects with mass</li>
+              <li>The more mass an object has, the stronger its gravitational pull</li>
+              <li>On Earth, gravity accelerates objects at 9.8 m/s²</li>
+              <li>Astronauts feel "weightless" in space because they're in free fall</li>
+            </ul>
+          </div>
+        </div>
+        <div>
+          <div class="img-placeholder">
+            [IMAGE: Earth with arrows showing gravity pulling objects toward center. Show apple falling from tree, water flowing down, person standing on ground]
+          </div>
+          <div class="video-placeholder">
+            <span style="font-size:2rem">▶</span>
+            <span>[VIDEO: Gravity demonstration - feather vs hammer drop in vacuum]</span>
+          </div>
+        </div>
+      </div>
+
+      <h3>Comprehension Check: Gravity</h3>
+      <div class="grid two">
+        <div class="example-box">
+          <p><strong>Question 1:</strong> Why do objects fall to the ground?</p>
+          <div class="radio-group" id="grav1">
+            <label class="radio-option"><input type="radio" name="grav1" value="A"> Air pushes them down</label>
+            <label class="radio-option"><input type="radio" name="grav1" value="B"> Gravity pulls them toward Earth</label>
+            <label class="radio-option"><input type="radio" name="grav1" value="C"> They want to rest</label>
+          </div>
+          <button class="btn" onclick="checkMC('grav1', 'B')">Check Answer</button>
+        </div>
+
+        <div class="example-box">
+          <p><strong>Question 2:</strong> What happens to gravity on the Moon?</p>
+          <div class="radio-group" id="grav2">
+            <label class="radio-option"><input type="radio" name="grav2" value="A"> There is no gravity on the Moon</label>
+            <label class="radio-option"><input type="radio" name="grav2" value="B"> Gravity is the same as on Earth</label>
+            <label class="radio-option"><input type="radio" name="grav2" value="C"> Gravity is weaker because the Moon has less mass</label>
+          </div>
+          <button class="btn" onclick="checkMC('grav2', 'C')">Check Answer</button>
+        </div>
+      </div>
+
+      <h3>Gap Fill: Gravity</h3>
+      <div class="example-box">
+        <p>Gravity is a <input type="text" id="grav-gap1" style="width:100px" placeholder="force"> that pulls objects toward each other. On Earth, gravity pulls everything toward the <input type="text" id="grav-gap2" style="width:100px" placeholder="center">. The more <input type="text" id="grav-gap3" style="width:100px" placeholder="mass"> an object has, the <input type="text" id="grav-gap4" style="width:100px" placeholder="stronger"> its gravitational pull.</p>
+        <div class="row" style="margin-top:0.6rem">
+          <button class="btn primary" onclick="checkGravGap()">Check Answers</button>
+          <span id="grav-gap-feedback" class="hint" aria-live="polite"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Magnetism -->
+    <section class="card" id="magnetism">
+      <h2>3) Magnetism</h2>
+      <div class="grid two">
+        <div>
+          <h3>What is Magnetism?</h3>
+          <p>Magnetism is a force that can attract or repel certain materials. Magnets have two poles:</p>
+          <ul>
+            <li><strong>North Pole (N)</strong></li>
+            <li><strong>South Pole (S)</strong></li>
+          </ul>
+          
+          <div class="callout">
+            <p><strong>Key Rules:</strong></p>
+            <ul>
+              <li>Opposite poles attract (N ↔ S)</li>
+              <li>Like poles repel (N ↔ N or S ↔ S)</li>
+              <li>Magnets attract magnetic materials: iron, nickel, cobalt</li>
+              <li>Magnets do NOT attract: wood, plastic, aluminum, copper</li>
+            </ul>
+          </div>
+
+          <h3>Magnetic vs Non-Magnetic Materials</h3>
+          <table>
+            <thead>
+              <tr><th>Magnetic</th><th>Non-Magnetic</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Iron</td><td>Wood</td></tr>
+              <tr><td>Nickel</td><td>Plastic</td></tr>
+              <tr><td>Cobalt</td><td>Glass</td></tr>
+              <tr><td>Steel</td><td>Aluminum</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <div class="img-placeholder">
+            [IMAGE: Bar magnet showing N and S poles with magnetic field lines. Show iron filings pattern around magnet]
+          </div>
+          <div class="img-placeholder">
+            [IMAGE: Two scenarios - magnets attracting (N-S) and repelling (N-N)]
+          </div>
+        </div>
+      </div>
+
+      <h3>Sorting Activity: Magnetic or Not?</h3>
+      <p class="hint">Drag each material to the correct category.</p>
+      <div class="grid" style="grid-template-columns: 2fr 3fr">
+        <div>
+          <div class="zone-title">Materials</div>
+          <div id="chips-magnet" class="dropzone"></div>
+          <div class="row" style="margin-top:0.6rem">
+            <button class="btn" onclick="resetMagnet()">Reset</button>
+            <button class="btn primary" onclick="checkMagnet()">Check</button>
+            <div aria-live="polite" id="score-magnet" class="score" style="margin-left:auto"></div>
+          </div>
+        </div>
+        <div class="grid two">
+          <div>
+            <div class="zone-title">Magnetic</div>
+            <div id="zone-magnetic" class="dropzone"></div>
+          </div>
+          <div>
+            <div class="zone-title">Non-Magnetic</div>
+            <div id="zone-nonmagnetic" class="dropzone"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Friction -->
+    <section class="card" id="friction">
+      <h2>4) Friction</h2>
+      <div class="grid two">
+        <div>
+          <h3>What is Friction?</h3>
+          <p>Friction is a force that opposes motion between two surfaces in contact. It always acts in the <strong>opposite direction</strong> to movement.</p>
+          
+          <div class="callout">
+            <p><strong>Effects of Friction:</strong></p>
+            <ul>
+              <li>Slows down moving objects</li>
+              <li>Produces heat (rub your hands together!)</li>
+              <li>Allows us to walk without slipping</li>
+              <li>Makes brakes work on bicycles and cars</li>
+              <li>Wears down surfaces over time</li>
+            </ul>
+          </div>
+
+          <h3>Factors Affecting Friction:</h3>
+          <ol>
+            <li><strong>Surface texture</strong>: Rough surfaces create more friction than smooth surfaces</li>
+            <li><strong>Weight/Force</strong>: Heavier objects create more friction</li>
+            <li><strong>Surface area</strong>: Doesn't significantly affect friction (common misconception!)</li>
+          </ol>
+        </div>
+        <div>
+          <div class="img-placeholder">
+            [IMAGE: Compare pushing box on rough carpet vs smooth floor. Show arrows indicating friction force opposing motion]
+          </div>
+          <div class="example-box">
+            <h4>Friction Examples:</h4>
+            <p><strong>High Friction (Useful):</strong></p>
+            <ul>
+              <li>Shoe soles on pavement (prevents slipping)</li>
+              <li>Brake pads on bike wheels</li>
+              <li>Sandpaper on wood</li>
+            </ul>
+            <p><strong>Low Friction (Useful):</strong></p>
+            <ul>
+              <li>Ice skates on ice</li>
+              <li>Oil in car engines</li>
+              <li>Skateboard wheels on smooth surface</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <h3>Comprehension: Friction</h3>
+      <div class="grid two">
+        <div class="example-box">
+          <p><strong>Question:</strong> Why do we use oil in car engines?</p>
+          <div class="radio-group" id="fric1">
+            <label class="radio-option"><input type="radio" name="fric1" value="A"> To increase friction and make parts move faster</label>
+            <label class="radio-option"><input type="radio" name="fric1" value="B"> To reduce friction and prevent wear and heat</label>
+            <label class="radio-option"><input type="radio" name="fric1" value="C"> To make the car heavier</label>
+          </div>
+          <button class="btn" onclick="checkMC('fric1', 'B')">Check Answer</button>
+        </div>
+
+        <div class="example-box">
+          <p><strong>Question:</strong> Which surface would create the MOST friction?</p>
+          <div class="radio-group" id="fric2">
+            <label class="radio-option"><input type="radio" name="fric2" value="A"> Polished ice</label>
+            <label class="radio-option"><input type="radio" name="fric2" value="B"> Smooth tile floor</label>
+            <label class="radio-option"><input type="radio" name="fric2" value="C"> Rough sandpaper</label>
+          </div>
+          <button class="btn" onclick="checkMC('fric2', 'C')">Check Answer</button>
+        </div>
+      </div>
+
+      <h3>Gap Fill: Friction</h3>
+      <div class="example-box">
+        <p>Friction is a force that <input type="text" id="fric-gap1" style="width:100px" placeholder="opposes"> motion. It acts in the <input type="text" id="fric-gap2" style="width:120px" placeholder="opposite"> direction to movement. Friction produces <input type="text" id="fric-gap3" style="width:100px" placeholder="heat"> when two surfaces rub together. <input type="text" id="fric-gap4" style="width:100px" placeholder="Rough"> surfaces create more friction than smooth surfaces.</p>
+        <div class="row" style="margin-top:0.6rem">
+          <button class="btn primary" onclick="checkFricGap()">Check Answers</button>
+          <span id="fric-gap-feedback" class="hint" aria-live="polite"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Elasticity -->
+    <section class="card" id="elasticity">
+      <h2>5) Elasticity</h2>
+      <div class="grid two">
+        <div>
+          <h3>What is Elasticity?</h3>
+          <p>Elasticity is the property of materials that allows them to return to their original shape after being stretched, compressed, or twisted.</p>
+          
+          <div class="callout">
+            <p><strong>Elastic Force:</strong> The force that pulls or pushes objects back to their original shape</p>
+          </div>
+
+          <h3>Elastic Materials:</h3>
+          <ul>
+            <li>Rubber bands</li>
+            <li>Springs</li>
+            <li>Balloons</li>
+            <li>Elastic fabric</li>
+            <li>Trampolines</li>
+          </ul>
+
+          <h3>Hooke's Law:</h3>
+          <div class="formula">
+            F = k × x
+          </div>
+          <p class="hint">F = force, k = spring constant, x = extension/compression</p>
+          <p>This means: The more you stretch a spring, the greater the force pulling it back (up to a limit)</p>
+        </div>
+        <div>
+          <div class="img-placeholder">
+            [IMAGE: Spring in three states - normal, stretched, compressed. Show arrows indicating elastic force]
+          </div>
+          <div class="img-placeholder">
+            [IMAGE: Rubber band being stretched and returning to original shape]
+          </div>
+          <div class="video-placeholder">
+            <span style="font-size:2rem">▶</span>
+            <span>[VIDEO: Hooke's Law demonstration with spring and weights]</span>
+          </div>
+        </div>
+      </div>
+
+      <h3>Elastic Limit</h3>
+      <div class="example-box">
+        <p>Every elastic material has an <strong>elastic limit</strong>. If you stretch it beyond this point, it will permanently deform and won't return to its original shape.</p>
+        <p><strong>Example:</strong> If you stretch a rubber band too far, it will snap or stay stretched out.</p>
+      </div>
+
+      <h3>Comprehension: Elasticity</h3>
+      <div class="example-box">
+        <p><strong>Question:</strong> What happens when you release a stretched spring?</p>
+        <div class="radio-group" id="elas1">
+          <label class="radio-option"><input type="radio" name="elas1" value="A"> It stays stretched</label>
+          <label class="radio-option"><input type="radio" name="elas1" value="B"> It returns to its original length due to elastic force</label>
+          <label class="radio-option"><input type="radio" name="elas1" value="C"> It becomes shorter than before</label>
+        </div>
+        <button class="btn" onclick="checkMC('elas1', 'B')">Check Answer</button>
+      </div>
+    </section>
+
+    <!-- 6. Newton's First Law -->
+    <section class="card" id="newton1">
+      <h2>6) Newton's First Law of Motion</h2>
+      <div class="law-box law1">
+        <h3>The Law of Inertia</h3>
+        <p style="font-size:1.1rem; font-weight:600">"An object at rest stays at rest, and an object in motion stays in motion at constant velocity, unless acted upon by an external force."</p>
+      </div>
+
+      <div class="grid two">
+        <div>
+          <h3>What is Inertia?</h3>
+          <p>Inertia is the tendency of objects to resist changes in their motion. The more mass an object has, the more inertia it has.</p>
+
+          <div class="callout">
+            <p><strong>Real-Life Examples:</strong></p>
+            <ul>
+              <li>When a car suddenly stops, passengers jerk forward (they want to keep moving)</li>
+              <li>A book on a table stays there until someone picks it up</li>
+              <li>A soccer ball keeps rolling until friction and air resistance stop it</li>
+              <li>When you pull a tablecloth quickly, dishes stay in place (inertia!)</li>
+            </ul>
+          </div>
+
+          <h3>Key Points:</h3>
+          <ul>
+            <li>Objects don't change their state of motion by themselves</li>
+            <li>A force is needed to start, stop, or change motion</li>
+            <li>In space (no friction), objects would move forever in a straight line</li>
+          </ul>
+        </div>
+        <div>
+          <div class="img-placeholder">
+            [IMAGE: Car stopping suddenly, passenger leaning forward due to inertia. Show arrows indicating direction of motion]
+          </div>
+          <div class="img-placeholder">
+            [IMAGE: Tablecloth trick - cloth pulled quickly, dishes remain due to inertia]
+          </div>
+        </div>
+      </div>
+
+      <h3>Comprehension: Newton's First Law</h3>
+      <div class="grid two">
+        <div class="example-box">
+          <p><strong>Question:</strong> A book is sitting on a table. What will happen to it?</p>
+          <div class="radio-group" id="n1q1">
+            <label class="radio-option"><input type="radio" name="n1q1" value="A"> It will eventually fall off by itself</label>
+            <label class="radio-option"><input type="radio" name="n1q1" value="B"> It will stay on the table until a force acts on it</label>
+            <label class="radio-option"><input type="radio" name="n1q1" value="C"> It will slowly start moving</label>
+          </div>
+          <button class="btn" onclick="checkMC('n1q1', 'B')">Check Answer</button>
+        </div>
+
+        <div class="example-box">
+          <p><strong>Question:</strong> Why do passengers in a car jerk forward when the car stops suddenly?</p>
+          <div class="radio-group" id="n1q2">
+            <label class="radio-option"><input type="radio" name="n1q2" value="A"> The car pushes them forward</label>
+            <label class="radio-option"><input type="radio" name="n1q2" value="B"> Gravity pulls them forward</label>
+            <label class="radio-option"><input type="radio" name="n1q2" value="C"> Inertia makes them want to keep moving forward</label>
+          </div>
+          <button class="btn" onclick="checkMC('n1q2', 'C')">Check Answer</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. Newton's Second Law -->
+    <section class="card" id="newton2">
+      <h2>7) Newton's Second Law of Motion</h2>
+      <div class="law-box law2">
+        <h3>Force, Mass, and Acceleration</h3>
+        <p style="font-size:1.1rem; font-weight:600">"The acceleration of an object depends on the force applied and the object's mass."</p>
+        <div class="formula" style="margin-top:1rem">
+          F = m × a
+        </div>
+        <p class="hint">F = Force (Newtons), m = mass (kg), a = acceleration (m/s²)</p>
+      </div>
+
+      <div class="grid two">
+        <div>
+          <h3>What Does This Mean?</h3>
+          <ul>
+            <li><strong>More force = more acceleration</strong><br>Push harder → object moves faster</li>
+            <li><strong>More mass = less acceleration</strong><br>Heavy objects are harder to move</li>
+          </ul>
+
+          <div class="callout">
+            <p><strong>Real-Life Examples:</strong></p>
+            <ul>
+              <li>It's easier to push an empty shopping cart than a full one (less mass)</li>
+              <li>A car with a powerful engine accelerates faster (more force)</li>
+              <li>A tennis ball is easier to throw than a bowling ball (less mass)</li>
+            </ul>
+          </div>
+
+          <h3>Practice Calculations:</h3>
+          <div class="example-box">
+            <p><strong>Example 1:</strong> If you push a 2 kg box with a force of 10 N, what is its acceleration?</p>
+            <p class="hint">F = m × a → a = F ÷ m</p>
+            <p>a = 10 N ÷ 2 kg = <strong>5 m/s²</strong></p>
+          </div>
+        </div>
+        <div>
+          <div class="img-placeholder">
+            [IMAGE: Comparison - person pushing empty cart (fast) vs full cart (slow). Show force arrows and acceleration]
+          </div>
+          <div class="img-placeholder">
+            [IMAGE: Formula triangle for F = m × a]
+          </div>
+        </div>
+      </div>
+
+      <h3>Gap Fill: Newton's Second Law</h3>
+      <div class="example-box">
+        <p>Newton's Second Law states that Force = <input type="text" id="n2-gap1" style="width:80px" placeholder="mass"> × <input type="text" id="n2-gap2" style="width:120px" placeholder="acceleration">. The more <input type="text" id="n2-gap3" style="width:80px" placeholder="force"> you apply, the greater the acceleration. Objects with more <input type="text" id="n2-gap4" style="width:80px" placeholder="mass"> are harder to accelerate.</p>
+        <div class="row" style="margin-top:0.6rem">
+          <button class="btn primary" onclick="checkN2Gap()">Check Answers</button>
+          <span id="n2-gap-feedback" class="hint" aria-live="polite"></span>
+        </div>
+      </div>
+
+      <h3>Calculation Practice:</h3>
+      <div class="example-box">
+        <p><strong>Question:</strong> A 5 kg object is pushed with a force of 20 N. What is its acceleration?</p>
+        <p>Acceleration = <input type="text" id="calc1" style="width:100px" placeholder="answer"> m/s²</p>
+        <button class="btn primary" onclick="checkCalc1()">Check Answer</button>
+        <span id="calc1-feedback" class="hint" aria-live="polite"></span>
+      </div>
+    </section>
+
+    <!-- 8. Newton's Third Law -->
+    <section class="card" id="newton3">
+      <h2>8) Newton's Third Law of Motion</h2>
+      <div class="law-box law3">
+        <h3>Action and Reaction</h3>
+        <p style="font-size:1.1rem; font-weight:600">"For every action, there is an equal and opposite reaction."</p>
+      </div>
+
+      <div class="grid two">
+        <div>
+          <h3>What Does This Mean?</h3>
+          <p>When one object exerts a force on another object, the second object exerts an equal force back in the opposite direction.</p>
+
+          <div class="callout">
+            <p><strong>Real-Life Examples:</strong></p>
+            <ul>
+              <li><strong>Walking:</strong> You push backward on the ground → ground pushes you forward</li>
+              <li><strong>Swimming:</strong> You push water backward → water pushes you forward</li>
+              <li><strong>Rocket:</strong> Rocket pushes gas downward → gas pushes rocket upward</li>
+              <li><strong>Jumping:</strong> You push down on ground → ground pushes you up</li>
+              <li><strong>Balloon:</strong> Air rushes out backward → balloon moves forward</li>
+            </ul>
+          </div>
+
+          <h3>Important Points:</h3>
+          <ul>
+            <li>Action and reaction forces are always equal in size</li>
+            <li>They act in opposite directions</li>
+            <li>They act on different objects</li>
+            <li>They occur at the same time</li>
+          </ul>
+        </div>
+        <div>
+          <div class="img-placeholder">
+            [IMAGE: Person pushing wall - show action force (person pushes wall) and reaction force (wall pushes person)]
+          </div>
+          <div class="img-placeholder">
+            [IMAGE: Rocket launching - show action (gas pushed down) and reaction (rocket pushed up)]
+          </div>
+          <div class="video-placeholder">
+            <span style="font-size:2rem">▶</span>
+            <span>[VIDEO: Action-reaction pairs demonstration]</span>
+          </div>
+        </div>
+      </div>
+
+      <h3>Sorting Activity: Match Action-Reaction Pairs</h3>
+      <p class="hint">Drag each action to its matching reaction.</p>
+      <div class="grid" style="grid-template-columns: 1fr 2fr">
+        <div>
+          <div class="zone-title">Actions</div>
+          <div id="chips-action" class="dropzone"></div>
+          <div class="row" style="margin-top:0.6rem">
+            <button class="btn" onclick="resetAction()">Reset</button>
+            <button class="btn primary" onclick="checkAction()">Check</button>
+          </div>
+        </div>
+        <div>
+          <div class="zone-title">Reactions (drop actions here)</div>
+          <div id="action-grid" class="grid"></div>
+          <div aria-live="polite" id="score-action" class="score" style="margin-top:0.6rem"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9. Forces Summary Challenge -->
+    <section class="card" id="challenge">
+      <h2>9) Challenge: Identify the Forces</h2>
+      <p class="hint">For each scenario, identify which force(s) are involved. Some scenarios may have multiple forces!</p>
+
+      <div class="grid two">
+        <div class="example-box">
+          <p><strong>Scenario 1:</strong> A ball falls from your hand to the ground.</p>
+          <div class="radio-group" id="ch1">
+            <label class="radio-option"><input type="radio" name="ch1" value="A"> Friction</label>
+            <label class="radio-option"><input type="radio" name="ch1" value="B"> Gravity</label>
+            <label class="radio-option"><input type="radio" name="ch1" value="C"> Magnetism</label>
+          </div>
+          <button class="btn" onclick="checkMC('ch1', 'B')">Check</button>
+        </div>
+
+        <div class="example-box">
+          <p><strong>Scenario 2:</strong> A paper clip sticks to a magnet.</p>
+          <div class="radio-group" id="ch2">
+            <label class="radio-option"><input type="radio" name="ch2" value="A"> Friction</label>
+            <label class="radio-option"><input type="radio" name="ch2" value="B"> Elasticity</label>
+            <label class="radio-option"><input type="radio" name="ch2" value="C"> Magnetism</label>
+          </div>
+          <button class="btn" onclick="checkMC('ch2', 'C')">Check</button>
+        </div>
+
+        <div class="example-box">
+          <p><strong>Scenario 3:</strong> A rubber band returns to its original shape after being stretched.</p>
+          <div class="radio-group" id="ch3">
+            <label class="radio-option"><input type="radio" name="ch3" value="A"> Elasticity</label>
+            <label class="radio-option"><input type="radio" name="ch3" value="B"> Magnetism</label>
+            <label class="radio-option"><input type="radio" name="ch3" value="C"> Gravity</label>
+          </div>
+          <button class="btn" onclick="checkMC('ch3', 'A')">Check</button>
+        </div>
+
+        <div class="example-box">
+          <p><strong>Scenario 4:</strong> A bicycle slows down when you squeeze the brakes.</p>
+          <div class="radio-group" id="ch4">
+            <label class="radio-option"><input type="radio" name="ch4" value="A"> Gravity</label>
+            <label class="radio-option"><input type="radio" name="ch4" value="B"> Friction</label>
+            <label class="radio-option"><input type="radio" name="ch4" value="C"> Elasticity</label>
+          </div>
+          <button class="btn" onclick="checkMC('ch4', 'B')">Check</button>
+        </div>
+
+        <div class="example-box">
+          <p><strong>Scenario 5:</strong> You jump on a trampoline and bounce back up.</p>
+          <div class="radio-group" id="ch5">
+            <label class="radio-option"><input type="radio" name="ch5" value="A"> Gravity + Elasticity</label>
+            <label class="radio-option"><input type="radio" name="ch5" value="B"> Only Friction</label>
+            <label class="radio-option"><input type="radio" name="ch5" value="C"> Only Magnetism</label>
+          </div>
+          <button class="btn" onclick="checkMC('ch5', 'A')">Check</button>
+        </div>
+
+        <div class="example-box">
+          <p><strong>Scenario 6:</strong> A car stops when the driver presses the brake pedal.</p>
+          <div class="radio-group" id="ch6">
+            <label class="radio-option"><input type="radio" name="ch6" value="A"> Magnetism</label>
+            <label class="radio-option"><input type="radio" name="ch6" value="B"> Friction + Newton's 1st Law</label>
+            <label class="radio-option"><input type="radio" name="ch6" value="C"> Elasticity</label>
+          </div>
+          <button class="btn" onclick="checkMC('ch6', 'B')">Check</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 10. Newton's Laws Identification -->
+    <section class="card" id="laws-challenge">
+      <h2>10) Challenge: Which Newton's Law?</h2>
+      <p class="hint">Identify which of Newton's three laws applies to each situation.</p>
+
+      <div class="grid">
+        <div class="example-box">
+          <p><strong>Situation A:</strong> A skateboard keeps rolling after you step off it.</p>
+          <div class="radio-group" id="law1">
+            <label class="radio-option"><input type="radio" name="law1" value="A"> First Law (Inertia)</label>
+            <label class="radio-option"><input type="radio" name="law1" value="B"> Second Law (F=ma)</label>
+            <label class="radio-option"><input type="radio" name="law1" value="C"> Third Law (Action-Reaction)</label>
+          </div>
+          <button class="btn" onclick="checkMC('law1', 'A')">Check</button>
+        </div>
+
+        <div class="example-box">
+          <p><strong>Situation B:</strong> A heavier shopping cart requires more force to push than a lighter one.</p>
+          <div class="radio-group" id="law2">
+            <label class="radio-option"><input type="radio" name="law2" value="A"> First Law (Inertia)</label>
+            <label class="radio-option"><input type="radio" name="law2" value="B"> Second Law (F=ma)</label>
+            <label class="radio-option"><input type="radio" name="law2" value="C"> Third Law (Action-Reaction)</label>
+          </div>
+          <button class="btn" onclick="checkMC('law2', 'B')">Check</button>
+        </div>
+
+        <div class="example-box">
+          <p><strong>Situation C:</strong> When you swim, you push water backward and move forward.</p>
+          <div class="radio-group" id="law3">
+            <label class="radio-option"><input type="radio" name="law3" value="A"> First Law (Inertia)</label>
+            <label class="radio-option"><input type="radio" name="law3" value="B"> Second Law (F=ma)</label>
+            <label class="radio-option"><input type="radio" name="law3" value="C"> Third Law (Action-Reaction)</label>
+          </div>
+          <button class="btn" onclick="checkMC('law3', 'C')">Check</button>
+        </div>
+
+        <div class="example-box">
+          <p><strong>Situation D:</strong> A rocket launches by expelling gas downward.</p>
+          <div class="radio-group" id="law4">
+            <label class="radio-option"><input type="radio" name="law4" value="A"> First Law (Inertia)</label>
+            <label class="radio-option"><input type="radio" name="law4" value="B"> Second Law (F=ma)</label>
+            <label class="radio-option"><input type="radio" name="law4" value="C"> Third Law (Action-Reaction)</label>
+          </div>
+          <button class="btn" onclick="checkMC('law4', 'C')">Check</button>
+        </div>
+
+        <div class="example-box">
+          <p><strong>Situation E:</strong> A book remains on a table until someone picks it up.</p>
+          <div class="radio-group" id="law5">
+            <label class="radio-option"><input type="radio" name="law5" value="A"> First Law (Inertia)</label>
+            <label class="radio-option"><input type="radio" name="law5" value="B"> Second Law (F=ma)</label>
+            <label class="radio-option"><input type="radio" name="law5" value="C"> Third Law (Action-Reaction)</label>
+          </div>
+          <button class="btn" onclick="checkMC('law5', 'A')">Check</button>
+        </div>
+
+        <div class="example-box">
+          <p><strong>Situation F:</strong> Doubling the force on an object doubles its acceleration.</p>
+          <div class="radio-group" id="law6">
+            <label class="radio-option"><input type="radio" name="law6" value="A"> First Law (Inertia)</label>
+            <label class="radio-option"><input type="radio" name="law6" value="B"> Second Law (F=ma)</label>
+            <label class="radio-option"><input type="radio" name="law6" value="C"> Third Law (Action-Reaction)</label>
+          </div>
+          <button class="btn" onclick="checkMC('law6', 'B')">Check</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 11. Summary -->
+    <section class="card" id="summary">
+      <h2>11) Lesson Summary</h2>
+      
+      <h3>The Four Forces:</h3>
+      <div class="grid four">
+        <div class="example-box">
+          <span class="pill gravity">Gravity</span>
+          <p>Pulls objects toward each other. On Earth, pulls everything toward the center.</p>
+        </div>
+        <div class="example-box">
+          <span class="pill magnet">Magnetism</span>
+          <p>Attracts or repels magnetic materials. Opposite poles attract, like poles repel.</p>
+        </div>
+        <div class="example-box">
+          <span class="pill friction">Friction</span>
+          <p>Opposes motion between surfaces. Creates heat and slows objects down.</p>
+        </div>
+        <div class="example-box">
+          <span class="pill elastic">Elasticity</span>
+          <p>Returns materials to original shape after deformation. Spring force.</p>
+        </div>
+      </div>
+
+      <h3>Newton's Three Laws:</h3>
+      <div class="grid">
+        <div class="law-box law1">
+          <h4>First Law: Inertia</h4>
+          <p>Objects resist changes in motion. Objects at rest stay at rest; objects in motion stay in motion unless acted upon by a force.</p>
+        </div>
+        <div class="law-box law2">
+          <h4>Second Law: F = m × a</h4>
+          <p>Force equals mass times acceleration. More force = more acceleration. More mass = less acceleration.</p>
+        </div>
+        <div class="law-box law3">
+          <h4>Third Law: Action-Reaction</h4>
+          <p>For every action, there is an equal and opposite reaction. Forces always come in pairs.</p>
+        </div>
+      </div>
+
+      <div class="callout">
+        <h3>Key Takeaways:</h3>
+        <ul>
+          <li>Forces are pushes or pulls that change motion, shape, or direction</li>
+          <li>Forces are measured in Newtons (N)</li>
+          <li>Multiple forces can act on an object at the same time</li>
+          <li>Understanding forces helps us design better machines, vehicles, and structures</li>
+          <li>Forces are everywhere in everyday life - we use them constantly!</li>
+        </ul>
+      </div>
+    </section>
+
+    <div class="footer">© Teacher version. Use freely in class. Deploy new version each unit.</div>
+  </main>
+
+<script>
+  // --- Magnetism Sorting Activity ---
+  const MAGNET_ITEMS = [
+    {text:"Iron nail", type:"magnetic"},
+    {text:"Wooden pencil", type:"nonmagnetic"},
+    {text:"Steel paper clip", type:"magnetic"},
+    {text:"Plastic ruler", type:"nonmagnetic"},
+    {text:"Nickel coin", type:"magnetic"},
+    {text:"Glass bottle", type:"nonmagnetic"},
+    {text:"Cobalt", type:"magnetic"},
+    {text:"Aluminum foil", type:"nonmagnetic"},
+    {text:"Steel scissors", type:"magnetic"},
+    {text:"Copper wire", type:"nonmagnetic"}
+  ];
+
+  const chipsMagnet = document.getElementById('chips-magnet');
+  const zoneMagnetic = document.getElementById('zone-magnetic');
+  const zoneNonmagnetic = document.getElementById('zone-nonmagnetic');
+  const scoreMagnet = document.getElementById('score-magnet');
+
+  function makeChip(item, idx, dataset = 'magnet'){
+    const el = document.createElement('div');
+    el.className = 'chip';
+    el.textContent = item.text;
+    el.setAttribute('draggable','true');
+    el.dataset.idx = idx;
+    el.dataset.type = item.type;
+    el.dataset.set = dataset;
+    el.addEventListener('dragstart', e=>{
+      e.dataTransfer.setData('text/plain', `${dataset}-${idx}`);
+    });
+    return el;
+  }
+
+  function setupDropzone(zone){
+    zone.addEventListener('dragover', e=>{ e.preventDefault(); zone.style.outline='2px solid #475569';});
+    zone.addEventListener('dragleave', ()=>{ zone.style.outline='none';});
+    zone.addEventListener('drop', e=>{
+      e.preventDefault(); zone.style.outline='none';
+      const data = e.dataTransfer.getData('text/plain');
+      const chip = document.querySelector(`.chip[data-set="${data.split('-')[0]}"][data-idx="${data.split('-')[1]}"]`);
+      if(chip) zone.appendChild(chip);
+    });
+  }
+
+  function resetMagnet(){
+    chipsMagnet.innerHTML=''; zoneMagnetic.innerHTML=''; zoneNonmagnetic.innerHTML=''; scoreMagnet.textContent='';
+    MAGNET_ITEMS.forEach((it,i)=> chipsMagnet.appendChild(makeChip(it,i,'magnet')) );
+  }
+
+  function checkMagnet(){
+    let correct = 0, total = MAGNET_ITEMS.length;
+    zoneMagnetic.querySelectorAll('.chip').forEach(ch=>{ 
+      if(ch.dataset.type==='magnetic') correct++; 
+      ch.style.borderColor = ch.dataset.type==='magnetic' ? '#16a34a' : '#ef4444'; 
+    });
+    zoneNonmagnetic.querySelectorAll('.chip').forEach(ch=>{ 
+      if(ch.dataset.type==='nonmagnetic') correct++; 
+      ch.style.borderColor = ch.dataset.type==='nonmagnetic' ? '#16a34a' : '#ef4444'; 
+    });
+    scoreMagnet.textContent = `Score: ${correct} / ${total}`;
+  }
+
+  setupDropzone(chipsMagnet); setupDropzone(zoneMagnetic); setupDropzone(zoneNonmagnetic);
+  resetMagnet();
+
+  // --- Action-Reaction Pairs ---
+  const ACTION_PAIRS = [
+    {action:"You push wall →", reaction:"Wall pushes you ←", id:"pair1"},
+    {action:"Rocket pushes gas down ↓", reaction:"Gas pushes rocket up ↑", id:"pair2"},
+    {action:"You push ground backward ←", reaction:"Ground pushes you forward →", id:"pair3"},
+    {action:"Bat hits ball →", reaction:"Ball pushes bat ←", id:"pair4"}
+  ];
+
+  const chipsAction = document.getElementById('chips-action');
+  const actionGrid = document.getElementById('action-grid');
+  const scoreAction = document.getElementById('score-action');
+
+  function resetAction(){
+    chipsAction.innerHTML=''; actionGrid.innerHTML=''; scoreAction.textContent='';
+    ACTION_PAIRS.forEach((pair,i)=>{
+      // Add action chip
+      const chip = document.createElement('div');
+      chip.className = 'chip';
+      chip.textContent = pair.action;
+      chip.setAttribute('draggable','true');
+      chip.dataset.id = pair.id;
+      chip.addEventListener('dragstart', e=>{
+        e.dataTransfer.setData('text/plain', pair.id);
+      });
+      chipsAction.appendChild(chip);
+
+      // Add reaction dropzone
+      const zone = document.createElement('div');
+      zone.className = 'example-box';
+      zone.innerHTML = `<div class="zone-title">${pair.reaction}</div><div class="dropzone" data-match="${pair.id}" style="min-height:60px"></div>`;
+      actionGrid.appendChild(zone);
+      
+      const dropzone = zone.querySelector('.dropzone');
+      setupDropzone(dropzone);
+    });
+  }
+
+  function checkAction(){
+    let correct = 0;
+    actionGrid.querySelectorAll('.dropzone').forEach(zone=>{
+      const chip = zone.querySelector('.chip');
+      if(chip && chip.dataset.id === zone.dataset.match){
+        correct++;
+        chip.style.borderColor = '#16a34a';
+      } else if(chip){
+        chip.style.borderColor = '#ef4444';
+      }
+    });
+    scoreAction.textContent = `Score: ${correct} / ${ACTION_PAIRS.length}`;
+  }
+
+  resetAction();
+
+  // --- Multiple Choice Function ---
+  function checkMC(id, correct){
+    const group = document.getElementById(id);
+    const selected = group.querySelector('input[type="radio"]:checked');
+    if(!selected){
+      alert('Please select an answer first!');
+      return;
+    }
+    const options = group.querySelectorAll('.radio-option');
+    options.forEach(opt => {
+      const input = opt.querySelector('input');
+      opt.classList.remove('correct', 'incorrect');
+      if(input.value === correct){
+        opt.classList.add('correct');
+      } else if(input.checked){
+        opt.classList.add('incorrect');
+      }
+    });
+  }
+
+  // --- Gap Fill Functions ---
+  function checkGravGap(){
+    const answers = [
+      document.getElementById('grav-gap1').value.toLowerCase().trim(),
+      document.getElementById('grav-gap2').value.toLowerCase().trim(),
+      document.getElementById('grav-gap3').value.toLowerCase().trim(),
+      document.getElementById('grav-gap4').value.toLowerCase().trim()
+    ];
+    const correct = ['force', 'center', 'mass', 'stronger'];
+    let score = 0;
+    answers.forEach((ans, i) => { if(ans === correct[i]) score++; });
+    const feedback = document.getElementById('grav-gap-feedback');
+    feedback.textContent = score === 4 ? 'Perfect!' : `${score}/4 correct. Try again!`;
+    feedback.style.color = score === 4 ? '#86efac' : '#fca5a5';
+  }
+
+  function checkFricGap(){
+    const answers = [
+      document.getElementById('fric-gap1').value.toLowerCase().trim(),
+      document.getElementById('fric-gap2').value.toLowerCase().trim(),
+      document.getElementById('fric-gap3').value.toLowerCase().trim(),
+      document.getElementById('fric-gap4').value.toLowerCase().trim()
+    ];
+    const correct = ['opposes', 'opposite', 'heat', 'rough'];
+    let score = 0;
+    answers.forEach((ans, i) => { if(ans === correct[i]) score++; });
+    const feedback = document.getElementById('fric-gap-feedback');
+    feedback.textContent = score === 4 ? 'Perfect!' : `${score}/4 correct. Try again!`;
+    feedback.style.color = score === 4 ? '#86efac' : '#fca5a5';
+  }
+
+  function checkN2Gap(){
+    const answers = [
+      document.getElementById('n2-gap1').value.toLowerCase().trim(),
+      document.getElementById('n2-gap2').value.toLowerCase().trim(),
+      document.getElementById('n2-gap3').value.toLowerCase().trim(),
+      document.getElementById('n2-gap4').value.toLowerCase().trim()
+    ];
+    const correct = ['mass', 'acceleration', 'force', 'mass'];
+    let score = 0;
+    answers.forEach((ans, i) => { if(ans === correct[i]) score++; });
+    const feedback = document.getElementById('n2-gap-feedback');
+    feedback.textContent = score === 4 ? 'Perfect!' : `${score}/4 correct. Try again!`;
+    feedback.style.color = score === 4 ? '#86efac' : '#fca5a5';
+  }
+
+  function checkCalc1(){
+    const answer = parseFloat(document.getElementById('calc1').value.trim());
+    const feedback = document.getElementById('calc1-feedback');
+    if(answer === 4){
+      feedback.textContent = 'Correct! F = m × a, so a = F ÷ m = 20 ÷ 5 = 4 m/s²';
+      feedback.style.color = '#86efac';
+    } else {
+      feedback.textContent = 'Not quite. Remember: a = F ÷ m. Try again!';
+      feedback.style.color = '#fca5a5';
+    }
+  }
+</script>
+</body>
+</html>
+

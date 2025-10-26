@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Expository Writing — Interactive Lesson</title>
+  <style>
+    :root{
+      --bg:#0b1020; --card:#121a33; --muted:#94a3b8; --text:#f1f5f9; --accent:#7c3aed; --good:#16a34a; --warn:#f59e0b; --bad:#ef4444;
+      --creative:#f472b6; --opinion:#fbbf24; --expo:#38bdf8; --grid: clamp(280px, 62ch, 1100px);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0; font: 16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji"; background:radial-gradient(1200px 800px at 80% -10%, #1e293b22, transparent), var(--bg); color:var(--text)}
+    a{color:var(--accent)}
+    header{position:sticky; top:0; backdrop-filter:saturate(1.2) blur(8px); background:#0b1020cc; border-bottom:1px solid #1f2a4b; z-index:10}
+    header .wrap{display:flex; gap:1rem; align-items:center; justify-content:space-between; max-width:var(--grid); padding:0.75rem 1rem; margin-inline:auto}
+    .badge{padding:0.2rem 0.55rem; border:1px solid #243253; border-radius:999px; font-size:0.8rem; color:var(--muted)}
+    .wrap{max-width:var(--grid); margin-inline:auto; padding:1rem}
+    h1,h2,h3{line-height:1.2; margin:0.2rem 0 0.6rem}
+    h1{font-size:clamp(1.4rem,2.4vw+1rem,2.2rem)}
+    h2{font-size:1.25rem; margin-top:2rem}
+    p{margin:0.25rem 0 0.75rem}
+    .grid{display:grid; gap:1rem}
+    @media(min-width:900px){.grid.two{grid-template-columns:1fr 1fr}}
+    @media(min-width:900px){.grid.three{grid-template-columns:1fr 1fr 1fr}}
+    .card{background:linear-gradient(180deg,#0f1730,#0b1227); border:1px solid #203056; border-radius:16px; padding:1.25rem; box-shadow:0 10px 30px #0006; margin-bottom:1.5rem}
+    .callout{border-left:4px solid var(--accent); padding-left:0.8rem; color:#cbd5e1; margin:0.75rem 0}
+    .pill{display:inline-flex; align-items:center; gap:0.4rem; padding:0.2rem 0.55rem; border-radius:999px; font-size:0.85rem; border:1px solid #2a3b67; font-weight:600}
+    .pill.creative{background:linear-gradient(180deg,#3a0e2a,#29081c); border-color:#6f1345; color:#ffd7ea}
+    .pill.opinion{background:linear-gradient(180deg,#3a2e0e,#2a1f08); border-color:#78350f; color:#fef3c7}
+    .pill.expo{background:linear-gradient(180deg,#052a3a,#041e2a); border-color:#0b4569; color:#c3e8ff}
+    table{width:100%; border-collapse:separate; border-spacing:0; margin:1rem 0}
+    th,td{padding:0.7rem; text-align:left}
+    thead th{position:sticky; top:0; background:#0f1730; border-bottom:1px solid #213259; font-weight:700}
+    tbody tr{border-bottom:1px solid #213259}
+    tbody tr:nth-child(odd){background:#0e162f}
+    .hint{color:var(--muted); font-size:0.9rem}
+    .btn{appearance:none; border:1px solid #27365e; border-radius:10px; background:#0c142b; color:var(--text); padding:0.55rem 0.8rem; cursor:pointer; font-size:0.95rem}
+    .btn:hover{background:#0f1730}
+    .btn.primary{border-color:#5b21b6; background:linear-gradient(180deg,#40207a,#2a1658)}
+    .btn.good{border-color:#14532d; background:linear-gradient(180deg,#164227,#0b2b19)}
+    .row{display:flex; gap:0.6rem; flex-wrap:wrap; align-items:center}
+    .dropzone{min-height:100px; border:2px dashed #2a3b67; border-radius:12px; padding:0.8rem; transition:all 0.2s}
+    .chip{display:inline-flex; align-items:center; gap:0.5rem; padding:0.4rem 0.7rem; border-radius:999px; background:#0e1a36; border:1px solid #293a68; cursor:grab; user-select:none; margin:0.25rem}
+    .chip[data-type="creative"]{border-color:#6f1345; background:#2c0c20}
+    .chip[data-type="opinion"]{border-color:#78350f; background:#2a1f08}
+    .chip[data-type="expo"]{border-color:#0b4569; background:#082336}
+    .zone-title{font-weight:600; color:var(--muted); margin-bottom:0.4rem; font-size:0.95rem}
+    .score{font-variant-numeric:tabular-nums; font-weight:700; color:var(--good)}
+    details{border:1px solid #213259; border-radius:12px; padding:0.6rem 0.8rem; background:#0c142b; margin:0.5rem 0}
+    details[open]{background:#0d1732}
+    details summary{cursor:pointer; font-weight:600}
+    .notice{display:grid; gap:0.25rem; background:#0b142a; border:1px dashed #2a3b67; padding:0.8rem 1rem; border-radius:12px; color:#cbd5e1}
+    .radio-group{display:grid; gap:0.5rem; margin:0.5rem 0}
+    .radio-option{display:flex; align-items:center; gap:0.6rem; padding:0.6rem; border:1px solid #223359; border-radius:10px; background:#0b142a; cursor:pointer; transition:all 0.2s}
+    .radio-option:hover{background:#0d1732; border-color:#2a3b67}
+    .radio-option input{cursor:pointer}
+    .radio-option.correct{border-color:var(--good); background:#0a221a}
+    .radio-option.incorrect{border-color:var(--bad); background:#2a0f0f}
+    textarea, input[type="text"]{width:100%; padding:0.8rem; border-radius:12px; background:#0b142a; color:var(--text); border:1px solid #223359; font:inherit; resize:vertical}
+    .example-box{background:#0b142a; border:1px solid #223359; padding:1rem; border-radius:12px; margin:0.75rem 0}
+    .footer{opacity:0.7; font-size:0.9rem; padding:2rem 0; text-align:center}
+    @media print{ header{position:static} .btn, details{display:none} body{background:#fff; color:#000} .card{box-shadow:none; background:#fff; border-color:#ddd} }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="row" aria-label="breadcrumb">
+        <span class="badge">KS2–KS3 Writing</span>
+        <span class="badge">Expository Writing</span>
+        <span class="badge">Unit 2</span>
+      </div>
+      <button class="btn" onclick="window.print()" aria-label="Print this lesson">Print</button>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <h1>Expository Writing — Interactive Lesson</h1>
+    <p class="hint">Objective: Understand expository writing, distinguish it from creative and opinion writing, master personal vs impersonal expository styles, and practice factual writing.</p>
+
+    <!-- 1. Introduction: Three Types of Writing -->
+    <section class="card" id="intro">
+      <h2>1) Three Types of Writing</h2>
+      <div class="grid three">
+        <div class="example-box">
+          <span class="pill creative">Creative</span>
+          <p><strong>Purpose:</strong> To entertain and engage imagination</p>
+          <p><strong>Features:</strong> Stories, descriptions, dialogue, emotions</p>
+          <p><strong>Example:</strong> "The dragon swooped down, its scales glittering like emeralds in the moonlight."</p>
+        </div>
+        <div class="example-box">
+          <span class="pill opinion">Opinion</span>
+          <p><strong>Purpose:</strong> To persuade or express beliefs</p>
+          <p><strong>Features:</strong> I think, should, best, worse, personal views</p>
+          <p><strong>Example:</strong> "I think pizza is the best food because it tastes delicious and everyone loves it."</p>
+        </div>
+        <div class="example-box">
+          <span class="pill expo">Expository</span>
+          <p><strong>Purpose:</strong> To inform and explain facts</p>
+          <p><strong>Features:</strong> Facts only, clear structure, no opinions</p>
+          <p><strong>Example:</strong> "Pizza originated in Naples, Italy. It typically consists of a wheat-based dough topped with tomato sauce and cheese."</p>
+        </div>
+      </div>
+
+      <div class="callout">
+        <p><strong>Key Point:</strong> Expository writing is purely factual. No "I think", no "should", no opinions — just facts!</p>
+      </div>
+    </section>
+
+    <!-- 2. Personal vs Impersonal Expository -->
+    <section class="card" id="personal-impersonal">
+      <h2>2) Personal vs Impersonal Expository Writing</h2>
+      <p>Unlike creative and opinion writing, expository writing can be written in either first person (personal) or third person (impersonal), depending on what you're explaining.</p>
+
+      <div class="grid two">
+        <div>
+          <h3>Personal Expository (First Person)</h3>
+          <div class="example-box">
+            <p><strong>When to use:</strong> Explaining about YOUR culture, YOUR tradition, YOUR experiences</p>
+            <p><strong>Can use:</strong> I, we, my, our</p>
+            <p><strong>Example:</strong></p>
+            <p style="font-style:italic; border-left:3px solid var(--expo); padding-left:0.6rem">"In my culture, we celebrate Chinese New Year. My family cleans the house before the festival. We eat dumplings together on New Year's Eve."</p>
+            <p class="hint">Notice: All facts about personal experience, no opinions!</p>
+          </div>
+        </div>
+        <div>
+          <h3>Impersonal Expository (Third Person)</h3>
+          <div class="example-box">
+            <p><strong>When to use:</strong> Explaining general facts, scientific information, historical events</p>
+            <p><strong>Can use:</strong> It, they, the, people</p>
+            <p><strong>Example:</strong></p>
+            <p style="font-style:italic; border-left:3px solid var(--expo); padding-left:0.6rem">"Chinese New Year is celebrated across Asia. People clean their homes before the festival. Families traditionally eat dumplings on New Year's Eve."</p>
+            <p class="hint">Notice: General facts, no personal reference!</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <p><strong>Important:</strong> If a question asks "Explain about YOUR culture" or "YOUR tradition" → Use personal expository (I, we, my).</p>
+        <p><strong>Important:</strong> If a question asks "Explain how photosynthesis works" → Use impersonal expository (it, they, plants).</p>
+      </div>
+    </section>
+
+    <!-- 3. Expository Has a SUMMARY, Not a Conclusion -->
+    <section class="card" id="summary-structure">
+      <h2>3) Expository Structure: Summary, Not Conclusion</h2>
+      <p>Creative and opinion writing have conclusions where you express final thoughts or feelings. Expository writing ends with a <strong>summary</strong> that restates the key facts.</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Writing Type</th>
+            <th>Ending</th>
+            <th>Example</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="pill creative">Creative</span></td>
+            <td>Conclusion with emotion</td>
+            <td>"And they lived happily ever after."</td>
+          </tr>
+          <tr>
+            <td><span class="pill opinion">Opinion</span></td>
+            <td>Conclusion with persuasion</td>
+            <td>"Therefore, schools should ban homework."</td>
+          </tr>
+          <tr>
+            <td><span class="pill expo">Expository</span></td>
+            <td>Summary of facts</td>
+            <td>"In summary, photosynthesis converts light energy into chemical energy."</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="example-box">
+        <h3>Sample Expository Paragraph Structure:</h3>
+        <p><strong>1. Topic sentence</strong> (introduces the topic)</p>
+        <p><strong>2. Supporting facts</strong> (3-5 facts with details)</p>
+        <p><strong>3. Summary sentence</strong> (restates main facts)</p>
+        <p class="hint">Remember: No opinions, no "I think", no "should" — only facts!</p>
+      </div>
+    </section>
+
+    <!-- 4. Practice: Identify Writing Types -->
+    <section class="card" id="identify-practice">
+      <h2>4) Practice: Identify the Writing Type</h2>
+      <p class="hint">Drag each sentence to the correct category.</p>
+
+      <div class="grid" style="grid-template-columns: 2fr 3fr">
+        <div>
+          <div class="zone-title">Sentences</div>
+          <div id="chips-identify" class="dropzone" aria-label="sentences pool"></div>
+          <div class="row" style="margin-top:0.6rem">
+            <button class="btn" onclick="resetIdentify()">Reset</button>
+            <button class="btn primary" onclick="checkIdentify()">Check</button>
+            <div aria-live="polite" id="score-identify" class="score" style="margin-left:auto"></div>
+          </div>
+        </div>
+        <div>
+          <div class="grid three">
+            <div>
+              <div class="zone-title"><span class="pill creative">Creative</span></div>
+              <div id="zone-creative" class="dropzone" aria-label="Creative bin"></div>
+            </div>
+            <div>
+              <div class="zone-title"><span class="pill opinion">Opinion</span></div>
+              <div id="zone-opinion" class="dropzone" aria-label="Opinion bin"></div>
+            </div>
+            <div>
+              <div class="zone-title"><span class="pill expo">Expository</span></div>
+              <div id="zone-expo" class="dropzone" aria-label="Expository bin"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Multiple Choice: Personal or Impersonal? -->
+    <section class="card" id="mc-personal">
+      <h2>5) Multiple Choice: Personal or Impersonal Expository?</h2>
+      <p class="hint">Choose whether each question requires personal or impersonal expository writing.</p>
+
+      <div class="grid two">
+        <div>
+          <h3>Question 1</h3>
+          <p><strong>"Explain about your family's traditions during holidays."</strong></p>
+          <div class="radio-group" id="mc1">
+            <label class="radio-option"><input type="radio" name="mc1" value="A"> Personal (I, we, my)</label>
+            <label class="radio-option"><input type="radio" name="mc1" value="B"> Impersonal (it, they, people)</label>
+          </div>
+          <button class="btn" onclick="checkMC('mc1', 'A')">Check Answer</button>
+        </div>
+
+        <div>
+          <h3>Question 2</h3>
+          <p><strong>"Explain how the water cycle works."</strong></p>
+          <div class="radio-group" id="mc2">
+            <label class="radio-option"><input type="radio" name="mc2" value="A"> Personal (I, we, my)</label>
+            <label class="radio-option"><input type="radio" name="mc2" value="B"> Impersonal (it, they, people)</label>
+          </div>
+          <button class="btn" onclick="checkMC('mc2', 'B')">Check Answer</button>
+        </div>
+
+        <div>
+          <h3>Question 3</h3>
+          <p><strong>"Describe the traditional clothing you wear for festivals."</strong></p>
+          <div class="radio-group" id="mc3">
+            <label class="radio-option"><input type="radio" name="mc3" value="A"> Personal (I, we, my)</label>
+            <label class="radio-option"><input type="radio" name="mc3" value="B"> Impersonal (it, they, people)</label>
+          </div>
+          <button class="btn" onclick="checkMC('mc3', 'A')">Check Answer</button>
+        </div>
+
+        <div>
+          <h3>Question 4</h3>
+          <p><strong>"Explain the process of photosynthesis in plants."</strong></p>
+          <div class="radio-group" id="mc4">
+            <label class="radio-option"><input type="radio" name="mc4" value="A"> Personal (I, we, my)</label>
+            <label class="radio-option"><input type="radio" name="mc4" value="B"> Impersonal (it, they, people)</label>
+          </div>
+          <button class="btn" onclick="checkMC('mc4', 'B')">Check Answer</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Gap Fill: Remove Opinions -->
+    <section class="card" id="gap-fill">
+      <h2>6) Gap Fill: Fix the Expository Writing</h2>
+      <p class="hint">Fill in the blanks to replace opinion words with factual language.</p>
+
+      <div class="example-box">
+        <p><strong>Original (Opinion):</strong> "I think pandas are the best animals. They are so cute and should be protected."</p>
+        <p><strong>Expository (Fixed):</strong> "Pandas are <input type="text" id="gap1" style="width:150px" placeholder="word 1"> to China. They are classified as <input type="text" id="gap2" style="width:180px" placeholder="word 2"> and are protected by conservation programs."</p>
+        <div class="row" style="margin-top:0.6rem">
+          <button class="btn primary" onclick="checkGap()">Check Answers</button>
+          <span id="gap-feedback" class="hint" aria-live="polite"></span>
+        </div>
+        <details>
+          <summary>Show answers</summary>
+          <p>1. native (or endemic), 2. endangered</p>
+        </details>
+      </div>
+
+      <div class="example-box">
+        <h3>Your Turn:</h3>
+        <p>Rewrite this opinion sentence as expository:</p>
+        <p><strong>Opinion:</strong> "I love Chinese New Year because it's the best festival!"</p>
+        <textarea id="rewrite1" rows="3" placeholder="Write your expository version here..."></textarea>
+        <details>
+          <summary>Model answer</summary>
+          <p>"Chinese New Year is the most important traditional festival in Chinese culture. It marks the beginning of the lunar calendar year."</p>
+        </details>
+      </div>
+    </section>
+
+    <!-- 7. Spot the Mistake -->
+    <section class="card" id="spot-mistake">
+      <h2>7) Spot the Mistake: Find the Non-Factual Words</h2>
+      <p class="hint">Each paragraph below LOOKS like expository writing but contains opinion words. Click the words that don't belong in expository writing.</p>
+
+      <div class="example-box">
+        <h3>Paragraph 1:</h3>
+        <p id="mistake1" class="mistake-para">
+          The Great Wall of China is <span class="mistake-word" onclick="markWord(this, true)">amazing</span>. It stretches over 21,000 kilometers. Construction began in the 7th century BC. The wall was built to protect Chinese states from invasions. Today, it <span class="mistake-word" onclick="markWord(this, true)">should</span> be visited by everyone because it's <span class="mistake-word" onclick="markWord(this, true)">the best</span> historical site.
+        </p>
+        <p class="hint">Correct answers: amazing, should, the best (all opinion words)</p>
+      </div>
+
+      <div class="example-box">
+        <h3>Paragraph 2:</h3>
+        <p id="mistake2" class="mistake-para">
+          In my family, we celebrate Mid-Autumn Festival every year. We eat mooncakes, which <span class="mistake-word" onclick="markWord(this, true)">taste delicious</span>. The festival falls on the 15th day of the 8th lunar month. My grandmother makes lanterns, and <span class="mistake-word" onclick="markWord(this, true)">I think</span> this is <span class="mistake-word" onclick="markWord(this, true)">the most fun</span> part of the celebration.
+        </p>
+        <p class="hint">Correct answers: taste delicious, I think, the most fun</p>
+      </div>
+    </section>
+
+    <!-- 8. Writing Practice: Personal Expository -->
+    <section class="card" id="write-personal">
+      <h2>8) Writing Practice: Personal Expository Paragraph</h2>
+      <div class="notice">
+        <p><strong>Prompt:</strong> Explain about a tradition your family celebrates. Remember to:</p>
+        <ul>
+          <li>Use personal pronouns (I, we, my, our)</li>
+          <li>State only facts (no "I think", no "should")</li>
+          <li>End with a summary, not a conclusion</li>
+        </ul>
+      </div>
+
+      <textarea id="write-personal-text" rows="8" placeholder="Write your personal expository paragraph here..."></textarea>
+
+      <div class="row" style="margin-top:0.6rem">
+        <button class="btn primary" onclick="checkWriting('personal')">Check Structure</button>
+        <div id="write-personal-feedback" class="hint" aria-live="polite"></div>
+      </div>
+
+      <details>
+        <summary>Model paragraph</summary>
+        <p style="font-style:italic; border-left:3px solid var(--expo); padding:0.8rem">"In my family, we celebrate Chinese New Year every January or February. My parents clean the house thoroughly before the festival begins. We decorate our home with red lanterns and couplets. On New Year's Eve, my whole family gathers for a large dinner. We eat dumplings, fish, and other traditional foods. Children receive red envelopes with money from elders. The celebration lasts for fifteen days. In summary, Chinese New Year is our most important family tradition."</p>
+      </details>
+    </section>
+
+    <!-- 9. Writing Practice: Impersonal Expository -->
+    <section class="card" id="write-impersonal">
+      <h2>9) Writing Practice: Impersonal Expository Paragraph</h2>
+      <div class="notice">
+        <p><strong>Prompt:</strong> Explain how plants make food (photosynthesis). Remember to:</p>
+        <ul>
+          <li>Use impersonal language (it, they, plants)</li>
+          <li>State only facts</li>
+          <li>End with a summary</li>
+        </ul>
+      </div>
+
+      <textarea id="write-impersonal-text" rows="8" placeholder="Write your impersonal expository paragraph here..."></textarea>
+
+      <div class="row" style="margin-top:0.6rem">
+        <button class="btn primary" onclick="checkWriting('impersonal')">Check Structure</button>
+        <div id="write-impersonal-feedback" class="hint" aria-live="polite"></div>
+      </div>
+
+      <details>
+        <summary>Model paragraph</summary>
+        <p style="font-style:italic; border-left:3px solid var(--expo); padding:0.8rem">"Plants make food through a process called photosynthesis. Chlorophyll in the leaves absorbs sunlight. The plant takes in carbon dioxide from the air through tiny pores. Water is absorbed by the roots from the soil. The plant combines these elements to produce glucose, a type of sugar. Oxygen is released as a byproduct. This process occurs mainly in the leaves. In summary, photosynthesis allows plants to convert light energy into chemical energy for growth."</p>
+      </details>
+    </section>
+
+    <!-- 10. Challenge: Question Recognition -->
+    <section class="card" id="challenge">
+      <h2>10) Challenge: Choose the Right Writing Type</h2>
+      <p class="hint">Read each question and decide which type of writing it requires.</p>
+
+      <div class="grid">
+        <div class="example-box">
+          <p><strong>Question A:</strong> "Write a story about a magical journey to the moon."</p>
+          <div class="radio-group" id="ch1">
+            <label class="radio-option"><input type="radio" name="ch1" value="creative"> Creative</label>
+            <label class="radio-option"><input type="radio" name="ch1" value="opinion"> Opinion</label>
+            <label class="radio-option"><input type="radio" name="ch1" value="expo"> Expository</label>
+          </div>
+          <button class="btn" onclick="checkChallenge('ch1', 'creative')">Check</button>
+        </div>
+
+        <div class="example-box">
+          <p><strong>Question B:</strong> "Do you think students should wear school uniforms? Explain why or why not."</p>
+          <div class="radio-group" id="ch2">
+            <label class="radio-option"><input type="radio" name="ch2" value="creative"> Creative</label>
+            <label class="radio-option"><input type="radio" name="ch2" value="opinion"> Opinion</label>
+            <label class="radio-option"><input type="radio" name="ch2" value="expo"> Expository</label>
+          </div>
+          <button class="btn" onclick="checkChallenge('ch2', 'opinion')">Check</button>
+        </div>
+
+        <div class="example-box">
+          <p><strong>Question C:</strong> "Explain how your family prepares for Spring Festival."</p>
+          <div class="radio-group" id="ch3">
+            <label class="radio-option"><input type="radio" name="ch3" value="creative"> Creative</label>
+            <label class="radio-option"><input type="radio" name="ch3" value="opinion"> Opinion</label>
+            <label class="radio-option"><input type="radio" name="ch3" value="expo"> Expository (Personal)</label>
+          </div>
+          <button class="btn" onclick="checkChallenge('ch3', 'expo')">Check</button>
+        </div>
+
+        <div class="example-box">
+          <p><strong>Question D:</strong> "Describe the life cycle of a butterfly."</p>
+          <div class="radio-group" id="ch4">
+            <label class="radio-option"><input type="radio" name="ch4" value="creative"> Creative</label>
+            <label class="radio-option"><input type="radio" name="ch4" value="opinion"> Opinion</label>
+            <label class="radio-option"><input type="radio" name="ch4" value="expo"> Expository (Impersonal)</label>
+          </div>
+          <button class="btn" onclick="checkChallenge('ch4', 'expo')">Check</button>
+        </div>
+
+        <div class="example-box">
+          <p><strong>Question E:</strong> "Tell about a time when you helped someone."</p>
+          <div class="radio-group" id="ch5">
+            <label class="radio-option"><input type="radio" name="ch5" value="creative"> Creative/Narrative</label>
+            <label class="radio-option"><input type="radio" name="ch5" value="opinion"> Opinion</label>
+            <label class="radio-option"><input type="radio" name="ch5" value="expo"> Expository</label>
+          </div>
+          <button class="btn" onclick="checkChallenge('ch5', 'creative')">Check</button>
+        </div>
+
+        <div class="example-box">
+          <p><strong>Question F:</strong> "Explain the customs and traditions in your culture during weddings."</p>
+          <div class="radio-group" id="ch6">
+            <label class="radio-option"><input type="radio" name="ch6" value="creative"> Creative</label>
+            <label class="radio-option"><input type="radio" name="ch6" value="opinion"> Opinion</label>
+            <label class="radio-option"><input type="radio" name="ch6" value="expo"> Expository (Personal)</label>
+          </div>
+          <button class="btn" onclick="checkChallenge('ch6', 'expo')">Check</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 11. Final Summary -->
+    <section class="card" id="summary">
+      <h2>11) Lesson Summary</h2>
+      <div class="callout">
+        <h3>Key Takeaways:</h3>
+        <ul>
+          <li><strong>Expository writing</strong> is purely factual — no opinions!</li>
+          <li>Use <strong>personal expository</strong> (I, we, my) when writing about YOUR culture or YOUR experiences</li>
+          <li>Use <strong>impersonal expository</strong> (it, they, the) for general facts and scientific explanations</li>
+          <li>Expository writing ends with a <strong>summary</strong>, not a conclusion</li>
+          <li>Avoid opinion words: "I think", "should", "best", "worst", emotional language</li>
+          <li>Stick to facts that can be verified or proven</li>
+        </ul>
+      </div>
+
+      <div class="notice">
+        <h3>Checklist for Expository Writing:</h3>
+        <ul>
+          <li>✓ Topic sentence introduces the topic clearly</li>
+          <li>✓ 3-5 supporting facts with details</li>
+          <li>✓ No opinion words or "I think" statements (unless it's personal expository using "I" for facts)</li>
+          <li>✓ Clear, factual language throughout</li>
+          <li>✓ Summary sentence restates the main facts</li>
+          <li>✓ Appropriate use of personal or impersonal voice based on the question</li>
+        </ul>
+      </div>
+    </section>
+
+    <div class="footer">© Teacher version. Use freely in class. Deploy new version each unit.</div>
+  </main>
+
+<script>
+  // --- Activity 4: Identify Writing Types ---
+  const IDENTIFY_ITEMS = [
+    {text:"The dragon soared through the clouds, its scales shimmering.", type:"creative"},
+    {text:"I believe homework should be banned from all schools.", type:"opinion"},
+    {text:"Water boils at 100 degrees Celsius at sea level.", type:"expo"},
+    {text:"Once upon a time, there lived a brave knight.", type:"creative"},
+    {text:"Recycling is the best way to save the planet.", type:"opinion"},
+    {text:"In my family, we eat dumplings during Chinese New Year.", type:"expo"},
+    {text:"The sunset painted the sky in brilliant shades of orange.", type:"creative"},
+    {text:"Dogs make better pets than cats because they're more loyal.", type:"opinion"},
+    {text:"The Great Wall of China stretches over 21,000 kilometers.", type:"expo"},
+    {text:"Scientists have discovered that plants grow toward light.", type:"expo"},
+    {text:"Everyone should learn to play a musical instrument.", type:"opinion"},
+    {text:"The princess wept tears of joy when she saw her kingdom.", type:"creative"}
+  ];
+
+  const chipsIdentify = document.getElementById('chips-identify');
+  const zoneCreative = document.getElementById('zone-creative');
+  const zoneOpinion = document.getElementById('zone-opinion');
+  const zoneExpo = document.getElementById('zone-expo');
+  const scoreIdentify = document.getElementById('score-identify');
+
+  function makeIdentifyChip(item, idx){
+    const el = document.createElement('div');
+    el.className = 'chip';
+    el.textContent = item.text;
+    el.setAttribute('draggable','true');
+    el.dataset.idx = idx;
+    el.dataset.type = item.type;
+    el.addEventListener('dragstart', e=>{
+      e.dataTransfer.setData('text/plain', idx);
+    });
+    return el;
+  }
+
+  function setupDropzone(zone){
+    zone.addEventListener('dragover', e=>{ e.preventDefault(); zone.style.outline='2px solid #475569';});
+    zone.addEventListener('dragleave', ()=>{ zone.style.outline='none';});
+    zone.addEventListener('drop', e=>{
+      e.preventDefault(); zone.style.outline='none';
+      const idx = e.dataTransfer.getData('text/plain');
+      const chip = document.querySelector(`.chip[data-idx="${idx}"]`);
+      if(chip) zone.appendChild(chip);
+    });
+  }
+
+  function resetIdentify(){
+    chipsIdentify.innerHTML=''; zoneCreative.innerHTML=''; zoneOpinion.innerHTML=''; zoneExpo.innerHTML=''; scoreIdentify.textContent='';
+    IDENTIFY_ITEMS.forEach((it,i)=> chipsIdentify.appendChild(makeIdentifyChip(it,i)) );
+  }
+
+  function checkIdentify(){
+    let correct = 0, total = IDENTIFY_ITEMS.length;
+    zoneCreative.querySelectorAll('.chip').forEach(ch=>{ if(ch.dataset.type==='creative') correct++; ch.style.borderColor = ch.dataset.type==='creative' ? '#16a34a' : '#ef4444'; });
+    zoneOpinion.querySelectorAll('.chip').forEach(ch=>{ if(ch.dataset.type==='opinion') correct++; ch.style.borderColor = ch.dataset.type==='opinion' ? '#16a34a' : '#ef4444'; });
+    zoneExpo.querySelectorAll('.chip').forEach(ch=>{ if(ch.dataset.type==='expo') correct++; ch.style.borderColor = ch.dataset.type==='expo' ? '#16a34a' : '#ef4444'; });
+    scoreIdentify.textContent = `Score: ${correct} / ${total}`;
+  }
+
+  setupDropzone(chipsIdentify); setupDropzone(zoneCreative); setupDropzone(zoneOpinion); setupDropzone(zoneExpo); 
+  resetIdentify();
+
+  // --- Activity 5: Multiple Choice ---
+  function checkMC(id, correct){
+    const group = document.getElementById(id);
+    const selected = group.querySelector('input[type="radio"]:checked');
+    if(!selected){
+      alert('Please select an answer first!');
+      return;
+    }
+    const options = group.querySelectorAll('.radio-option');
+    options.forEach(opt => {
+      const input = opt.querySelector('input');
+      opt.classList.remove('correct', 'incorrect');
+      if(input.value === correct){
+        opt.classList.add('correct');
+      } else if(input.checked){
+        opt.classList.add('incorrect');
+      }
+    });
+  }
+
+  // --- Activity 6: Gap Fill ---
+  function checkGap(){
+    const ans1 = document.getElementById('gap1').value.toLowerCase().trim();
+    const ans2 = document.getElementById('gap2').value.toLowerCase().trim();
+    const feedback = document.getElementById('gap-feedback');
+    let correct = 0;
+    if(ans1 === 'native' || ans1 === 'endemic' || ans1 === 'indigenous') correct++;
+    if(ans2 === 'endangered') correct++;
+    feedback.textContent = correct === 2 ? 'Perfect!' : `${correct}/2 correct. Try again!`;
+    feedback.style.color = correct === 2 ? '#86efac' : '#fca5a5';
+  }
+
+  // --- Activity 7: Spot the Mistake ---
+  function markWord(el, isCorrect){
+    if(el.classList.contains('marked')){
+      el.style.background = '';
+      el.style.color = '';
+      el.classList.remove('marked');
+    } else {
+      el.style.background = isCorrect ? '#14532d' : '#7c2d12';
+      el.style.color = '#fff';
+      el.style.padding = '2px 4px';
+      el.style.borderRadius = '4px';
+      el.classList.add('marked');
+    }
+  }
+
+  // --- Activity 8 & 9: Writing Check ---
+  function checkWriting(type){
+    const text = document.getElementById(`write-${type}-text`).value.trim();
+    const feedback = document.getElementById(`write-${type}-feedback`);
+    if(!text){
+      feedback.textContent = 'Please write something first!';
+      feedback.style.color = '#fca5a5';
+      return;
+    }
+    
+    let issues = [];
+    // Check for opinion words
+    if(/\b(I think|should|best|worst|better|worse|love|hate|amazing|terrible)\b/i.test(text)){
+      issues.push('Contains opinion words');
+    }
+    // Check for summary
+    if(!/\b(In summary|To summarize|In conclusion)\b/i.test(text)){
+      issues.push('Missing summary sentence');
+    }
+    // Check pronouns based on type
+    if(type === 'personal' && !/\b(I|we|my|our)\b/i.test(text)){
+      issues.push('Should use personal pronouns (I, we, my, our)');
+    }
+    if(type === 'impersonal' && /\b(I|my|we|our)\b/i.test(text)){
+      issues.push('Should not use personal pronouns - use impersonal language');
+    }
+
+    if(issues.length === 0){
+      feedback.textContent = 'Great work! Your structure looks good.';
+      feedback.style.color = '#86efac';
+    } else {
+      feedback.textContent = 'Issues: ' + issues.join(', ');
+      feedback.style.color = '#fca5a5';
+    }
+  }
+
+  // --- Activity 10: Challenge ---
+  function checkChallenge(id, correct){
+    const group = document.getElementById(id);
+    const selected = group.querySelector('input[type="radio"]:checked');
+    if(!selected){
+      alert('Please select an answer first!');
+      return;
+    }
+    const options = group.querySelectorAll('.radio-option');
+    options.forEach(opt => {
+      const input = opt.querySelector('input');
+      opt.classList.remove('correct', 'incorrect');
+      if(input.value === correct){
+        opt.classList.add('correct');
+      } else if(input.checked){
+        opt.classList.add('incorrect');
+      }
+    });
+  }
+</script>
+</body>
+</html>
+

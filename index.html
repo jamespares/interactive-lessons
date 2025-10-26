@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Interactive Learning Activities</title>
+  <style>
+    :root{
+      --bg:#0b1020; --card:#121a33; --muted:#94a3b8; --text:#f1f5f9; --accent:#7c3aed;
+      --english:#38bdf8; --uoi:#f472b6; --grid: clamp(280px, 62ch, 1100px);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%; margin:0}
+    body{font: 16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial; background:radial-gradient(1200px 800px at 80% -10%, #1e293b22, transparent), var(--bg); color:var(--text); display:flex; align-items:center; justify-content:center; padding:1rem}
+    .container{max-width:var(--grid); width:100%}
+    h1{font-size:clamp(1.8rem,3vw+1rem,3rem); margin:0 0 1rem; text-align:center}
+    .subtitle{text-align:center; color:var(--muted); margin-bottom:3rem}
+    .grid{display:grid; gap:1.5rem}
+    @media(min-width:900px){.grid{grid-template-columns:1fr 1fr}}
+    .card{background:linear-gradient(180deg,#0f1730,#0b1227); border:1px solid #203056; border-radius:16px; padding:2rem; box-shadow:0 10px 30px #0006; transition:all 0.3s ease}
+    .card:hover{transform:translateY(-4px); box-shadow:0 20px 40px #0008; border-color:#2a3b67}
+    .card h2{margin:0 0 0.75rem; font-size:1.5rem}
+    .card p{color:var(--muted); margin:0 0 1.5rem; line-height:1.6}
+    .card ul{margin:0 0 1.5rem; padding-left:1.5rem; color:var(--muted)}
+    .card li{margin:0.4rem 0}
+    .btn{display:inline-block; padding:0.75rem 1.5rem; border-radius:10px; text-decoration:none; font-weight:600; transition:all 0.2s; border:1px solid}
+    .btn.english{background:linear-gradient(180deg,#0c4a6e,#082f49); border-color:#0b4569; color:#c3e8ff}
+    .btn.english:hover{background:linear-gradient(180deg,#0e5a85,#0a3a5a)}
+    .btn.uoi{background:linear-gradient(180deg,#701a75,#4a0e4e); border-color:#6f1345; color:#ffd7ea}
+    .btn.uoi:hover{background:linear-gradient(180deg,#86208a,#5a1560)}
+    .badge{display:inline-block; padding:0.25rem 0.65rem; border-radius:999px; font-size:0.85rem; font-weight:600; margin-bottom:0.75rem}
+    .badge.english{background:#052a3a; border:1px solid #0b4569; color:#c3e8ff}
+    .badge.uoi{background:#3a0e2a; border:1px solid #6f1345; color:#ffd7ea}
+    .footer{text-align:center; margin-top:3rem; color:var(--muted); opacity:0.7}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Interactive Learning Activities</h1>
+    <p class="subtitle">Unit 2 - Select your subject to begin</p>
+
+    <div class="grid">
+      <!-- English Card -->
+      <div class="card">
+        <span class="badge english">English</span>
+        <h2>Expository Writing</h2>
+        <p>Learn the difference between creative, opinion, and expository writing. Master personal vs impersonal styles and practice factual writing.</p>
+        <ul>
+          <li>Interactive sorting activities</li>
+          <li>Multiple choice questions</li>
+          <li>Gap fill exercises</li>
+          <li>Writing practice with feedback</li>
+        </ul>
+        <a href="English/expository-writing.html" class="btn english">Start English Lesson →</a>
+      </div>
+
+      <!-- UOI Card -->
+      <div class="card">
+        <span class="badge uoi">Science - UOI</span>
+        <h2>Forces and Motion</h2>
+        <p>Explore gravity, magnetism, friction, and elasticity. Understand Newton's three laws of motion through interactive experiments.</p>
+        <ul>
+          <li>4 main forces with examples</li>
+          <li>Newton's laws explained</li>
+          <li>Drag-and-drop activities</li>
+          <li>Calculations and comprehension</li>
+        </ul>
+        <a href="UOI/forces-motion.html" class="btn uoi">Start Science Lesson →</a>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>© Interactive Learning Activities - Use freely in class</p>
+    </div>
+  </div>
+</body>
+</html>
+
