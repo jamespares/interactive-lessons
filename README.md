@@ -25,7 +25,11 @@ Explore the four main forces and Newton's three laws of motion through interacti
 [View Science Lesson →](UOI/forces-motion.html)
 
 ## 🌐 Live Site
-Visit: [Your GitHub Pages URL will appear here after deployment]
+Visit: **https://jamespares.github.io/interactive-lessons/**
+
+### Direct Links:
+- [English - Expository Writing](https://jamespares.github.io/interactive-lessons/English/expository-writing.html)
+- [Science - Forces and Motion](https://jamespares.github.io/interactive-lessons/UOI/forces-motion.html)
 
 ## 📝 Features
 - Professional dark theme
