@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>A1 French Interactive Lesson — 法语A1互动课程</title>
+  <style>
+    :root{
+      --bg:#0b1020; --card:#121a33; --muted:#94a3b8; --text:#f1f5f9; --accent:#7c3aed; --good:#16a34a; --warn:#f59e0b; --bad:#ef4444;
+      --french:#6366f1; --chinese:#f472b6; --english:#38bdf8; --grid: clamp(280px, 62ch, 1100px);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0; font: 16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji"; background:radial-gradient(1200px 800px at 80% -10%, #1e293b22, transparent), var(--bg); color:var(--text)}
+    a{color:var(--accent)}
+    header{position:sticky; top:0; backdrop-filter:saturate(1.2) blur(8px); background:#0b1020cc; border-bottom:1px solid #1f2a4b; z-index:10}
+    header .wrap{display:flex; gap:1rem; align-items:center; justify-content:space-between; max-width:var(--grid); padding:0.75rem 1rem; margin-inline:auto}
+    .badge{padding:0.2rem 0.55rem; border:1px solid #243253; border-radius:999px; font-size:0.8rem; color:var(--muted)}
+    .wrap{max-width:var(--grid); margin-inline:auto; padding:1rem}
+    h1,h2,h3{line-height:1.2; margin:0.2rem 0 0.6rem}
+    h1{font-size:clamp(1.4rem,2.4vw+1rem,2.2rem)}
+    h2{font-size:1.25rem; margin-top:2.5rem}
+    h3{font-size:1.1rem; margin-top:1rem}
+    p{margin:0.25rem 0 0.75rem}
+    .grid{display:grid; gap:1rem}
+    @media(min-width:900px){.grid.two{grid-template-columns:1fr 1fr}}
+    @media(min-width:900px){.grid.three{grid-template-columns:1fr 1fr 1fr}}
+    @media(min-width:900px){.grid.four{grid-template-columns:1fr 1fr 1fr 1fr}}
+    .card{background:linear-gradient(180deg,#0f1730,#0b1227); border:1px solid #203056; border-radius:16px; padding:1.25rem; box-shadow:0 10px 30px #0006; margin-bottom:2rem}
+    .callout{border-left:4px solid var(--accent); padding-left:0.8rem; color:#cbd5e1; margin:1rem 0}
+    .pill{display:inline-flex; align-items:center; gap:0.4rem; padding:0.25rem 0.6rem; border-radius:999px; font-size:0.85rem; border:1px solid #2a3b67; font-weight:600}
+    .pill.french{background:linear-gradient(180deg,#2d2d52,#1a1a38); border-color:#4f46e5; color:#c7d2fe}
+    .pill.chinese{background:linear-gradient(180deg,#3a0e2a,#29081c); border-color:#db2777; color:#fce7f3}
+    .pill.english{background:linear-gradient(180deg,#052a3a,#041e2a); border-color:#0284c7; color:#bae6fd}
+    .pill.masc{background:linear-gradient(180deg,#0c4a6e,#082f49); border-color:#0369a1; color:#7dd3fc}
+    .pill.fem{background:linear-gradient(180deg,#701a75,#4a0e4e); border-color:#a21caf; color:#f0abfc}
+    table{width:100%; border-collapse:separate; border-spacing:0; margin:1rem 0}
+    th,td{padding:0.7rem; text-align:left}
+    thead th{position:sticky; top:0; background:#0f1730; border-bottom:1px solid #213259; font-weight:700}
+    tbody tr{border-bottom:1px solid #213259}
+    tbody tr:nth-child(odd){background:#0e162f}
+    .hint{color:var(--muted); font-size:0.9rem}
+    .btn{appearance:none; border:1px solid #27365e; border-radius:10px; background:#0c142b; color:var(--text); padding:0.55rem 0.8rem; cursor:pointer; font-size:0.95rem}
+    .btn:hover{background:#0f1730}
+    .btn.primary{border-color:#5b21b6; background:linear-gradient(180deg,#40207a,#2a1658)}
+    .btn.good{border-color:#14532d; background:linear-gradient(180deg,#164227,#0b2b19)}
+    .row{display:flex; gap:0.6rem; flex-wrap:wrap; align-items:center}
+    .dropzone{min-height:100px; border:2px dashed #2a3b67; border-radius:12px; padding:0.8rem; transition:all 0.2s}
+    .chip{display:inline-flex; align-items:center; gap:0.5rem; padding:0.4rem 0.7rem; border-radius:999px; background:#0e1a36; border:1px solid #293a68; cursor:grab; user-select:none; margin:0.25rem; font-size:0.9rem}
+    .chip[data-gender="masc"]{border-color:#0369a1; background:#082f49}
+    .chip[data-gender="fem"]{border-color:#a21caf; background:#4a0e4e}
+    .zone-title{font-weight:600; color:var(--muted); margin-bottom:0.4rem; font-size:0.95rem}
+    .score{font-variant-numeric:tabular-nums; font-weight:700; color:var(--good)}
+    details{border:1px solid #213259; border-radius:12px; padding:0.6rem 0.8rem; background:#0c142b; margin:0.5rem 0}
+    details[open]{background:#0d1732}
+    details summary{cursor:pointer; font-weight:600}
+    .notice{display:grid; gap:0.25rem; background:#0b142a; border:1px dashed #2a3b67; padding:0.8rem 1rem; border-radius:12px; color:#cbd5e1}
+    .radio-group{display:grid; gap:0.5rem; margin:0.5rem 0}
+    .radio-option{display:flex; align-items:center; gap:0.6rem; padding:0.6rem; border:1px solid #223359; border-radius:10px; background:#0b142a; cursor:pointer; transition:all 0.2s}
+    .radio-option:hover{background:#0d1732; border-color:#2a3b67}
+    .radio-option input{cursor:pointer}
+    .radio-option.correct{border-color:var(--good); background:#0a221a}
+    .radio-option.incorrect{border-color:var(--bad); background:#2a0f0f}
+    input[type="text"]{width:100%; padding:0.8rem; border-radius:12px; background:#0b142a; color:var(--text); border:1px solid #223359; font:inherit}
+    .example-box{background:#0b142a; border:1px solid #223359; padding:1rem; border-radius:12px; margin:0.75rem 0}
+    .vocab-card{background:linear-gradient(180deg,#0d1732,#0a121f); border:1px solid #223359; padding:1rem; border-radius:12px; text-align:center; transition:all 0.3s}
+    .vocab-card:hover{border-color:#3b4c7a; transform:translateY(-2px)}
+    .vocab-card .french-word{font-size:1.8rem; font-weight:700; color:#c7d2fe; margin:0.5rem 0}
+    .vocab-card .english{color:#7dd3fc; font-size:1rem; margin:0.25rem 0}
+    .vocab-card .chinese{color:#f9a8d4; font-size:1.1rem; margin:0.25rem 0}
+    .img-placeholder{width:100%; height:200px; background:linear-gradient(135deg, #1e293b, #0f172a); border:2px dashed #334155; border-radius:12px; display:flex; align-items:center; justify-content:center; color:#64748b; font-size:0.9rem; margin:0.75rem 0}
+    .conj-box{background:#0a1628; border:1px solid #223359; padding:0.8rem; border-radius:8px; font-family:ui-monospace, monospace}
+    .footer{opacity:0.7; font-size:0.9rem; padding:2rem 0; text-align:center}
+    @media print{ header{position:static} .btn, details{display:none} body{background:#fff; color:#000} .card{box-shadow:none; background:#fff; border-color:#ddd} }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="row" aria-label="breadcrumb">
+        <span class="badge">A1 French | 法语A1</span>
+        <span class="badge">For Chinese Learners</span>
+        <span class="badge">Interactive Lesson</span>
+      </div>
+      <button class="btn" onclick="window.print()" aria-label="Print this lesson">Print</button>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <h1>A1 French Interactive Lesson — 法语A1互动课程</h1>
+    <p class="hint">Welcome! This comprehensive lesson covers essential A1 French: greetings, numbers, colors, basic verbs (être, avoir), gender, and simple conversations. 欢迎！本课程涵盖基础法语A1级别内容。</p>
+
+    <!-- 1. Greetings and Polite Expressions -->
+    <section class="card" id="greetings">
+      <h2>1) Greetings and Polite Expressions — 问候和礼貌用语</h2>
+      
+      <div class="grid two">
+        <div class="vocab-card">
+          <div class="chinese">你好 / 早上好</div>
+          <div class="english">Hello / Good morning</div>
+          <div class="french-word">Bonjour</div>
+        </div>
+        <div class="vocab-card">
+          <div class="chinese">晚上好</div>
+          <div class="english">Good evening</div>
+          <div class="french-word">Bonsoir</div>
+        </div>
+        <div class="vocab-card">
+          <div class="chinese">再见</div>
+          <div class="english">Goodbye</div>
+          <div class="french-word">Au revoir</div>
+        </div>
+        <div class="vocab-card">
+          <div class="chinese">嗨（非正式）</div>
+          <div class="english">Hi (informal)</div>
+          <div class="french-word">Salut</div>
+        </div>
+      </div>
+
+      <h3>Essential Polite Phrases</h3>
+      <table>
+        <thead>
+          <tr><th>中文</th><th>English</th><th>Français</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>请（正式）</td><td>Please (formal)</td><td><strong>S'il vous plaît</strong></td></tr>
+          <tr><td>谢谢</td><td>Thank you</td><td><strong>Merci</strong></td></tr>
+          <tr><td>非常感谢</td><td>Thank you very much</td><td><strong>Merci beaucoup</strong></td></tr>
+          <tr><td>不客气</td><td>You're welcome</td><td><strong>De rien</strong></td></tr>
+          <tr><td>对不起</td><td>Excuse me / Sorry</td><td><strong>Pardon / Excusez-moi</strong></td></tr>
+          <tr><td>是</td><td>Yes</td><td><strong>Oui</strong></td></tr>
+          <tr><td>不</td><td>No</td><td><strong>Non</strong></td></tr>
+        </tbody>
+      </table>
+
+      <h3>Practice: Match the Greetings</h3>
+      <div class="example-box">
+        <p class="hint">Click the correct French greeting for each situation:</p>
+        <div style="margin:1rem 0">
+          <p><strong>1. You meet your teacher in the morning:</strong></p>
+          <div class="radio-group" id="greet1">
+            <label class="radio-option"><input type="radio" name="greet1" value="A"> Bonsoir</label>
+            <label class="radio-option"><input type="radio" name="greet1" value="B"> Bonjour</label>
+            <label class="radio-option"><input type="radio" name="greet1" value="C"> Bonne nuit</label>
+          </div>
+          <button class="btn" onclick="checkMC('greet1', 'B')">Check</button>
+        </div>
+        <div style="margin:1rem 0">
+          <p><strong>2. You meet a friend at 7 PM:</strong></p>
+          <div class="radio-group" id="greet2">
+            <label class="radio-option"><input type="radio" name="greet2" value="A"> Bonjour</label>
+            <label class="radio-option"><input type="radio" name="greet2" value="B"> Au revoir</label>
+            <label class="radio-option"><input type="radio" name="greet2" value="C"> Bonsoir</label>
+          </div>
+          <button class="btn" onclick="checkMC('greet2', 'C')">Check</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Introducing Yourself -->
+    <section class="card" id="introductions">
+      <h2>2) Introducing Yourself — 自我介绍</h2>
+      
+      <div class="callout">
+        <h3>Key Phrases:</h3>
+        <ul>
+          <li><strong>Comment vous appelez-vous?</strong> (正式) — What's your name? (formal)</li>
+          <li><strong>Comment tu t'appelles?</strong> (非正式) — What's your name? (informal)</li>
+          <li><strong>Je m'appelle...</strong> — My name is...</li>
+          <li><strong>Enchanté(e)</strong> — Nice to meet you</li>
+          <li><strong>Quel âge avez-vous?</strong> — How old are you?</li>
+          <li><strong>J'ai ... ans</strong> — I am ... years old</li>
+        </ul>
+      </div>
+
+      <div class="example-box">
+        <h3>Sample Conversation — 对话示例</h3>
+        <p><strong>Person A:</strong> Bonjour! Comment tu t'appelles?</p>
+        <p class="hint">你好！你叫什么名字？ / Hello! What's your name?</p>
+        <p><strong>Person B:</strong> Bonjour! Je m'appelle Marie. Et toi?</p>
+        <p class="hint">你好！我叫玛丽。你呢？ / Hello! My name is Marie. And you?</p>
+        <p><strong>Person A:</strong> Je m'appelle Pierre. Enchanté!</p>
+        <p class="hint">我叫皮埃尔。很高兴认识你！ / My name is Pierre. Nice to meet you!</p>
+        <p><strong>Person B:</strong> Enchantée! Quel âge as-tu?</p>
+        <p class="hint">很高兴认识你！你多大了？ / Nice to meet you! How old are you?</p>
+        <p><strong>Person A:</strong> J'ai quinze ans. Et toi?</p>
+        <p class="hint">我15岁。你呢？ / I'm 15 years old. And you?</p>
+        <p><strong>Person B:</strong> J'ai quatorze ans.</p>
+        <p class="hint">我14岁。 / I'm 14 years old.</p>
+      </div>
+
+      <h3>Fill in the Blanks — 填空练习</h3>
+      <div class="example-box">
+        <p>Complete the introduction:</p>
+        <p>Bonjour! <input type="text" id="intro1" style="width:150px" placeholder="Je m'appelle"> Sophie. <input type="text" id="intro2" style="width:80px" placeholder="J'ai"> 13 ans.</p>
+        <button class="btn primary" onclick="checkIntro()">Check Answers</button>
+        <span id="intro-feedback" class="hint" aria-live="polite"></span>
+      </div>
+    </section>
+
+    <!-- 3. Numbers 0-20 -->
+    <section class="card" id="numbers">
+      <h2>3) Numbers 0-20 — 数字 0-20</h2>
+      
+      <div class="grid four">
+        <div class="vocab-card"><div class="chinese">零</div><div class="french-word">zéro</div></div>
+        <div class="vocab-card"><div class="chinese">一</div><div class="french-word">un</div></div>
+        <div class="vocab-card"><div class="chinese">二</div><div class="french-word">deux</div></div>
+        <div class="vocab-card"><div class="chinese">三</div><div class="french-word">trois</div></div>
+        <div class="vocab-card"><div class="chinese">四</div><div class="french-word">quatre</div></div>
+        <div class="vocab-card"><div class="chinese">五</div><div class="french-word">cinq</div></div>
+        <div class="vocab-card"><div class="chinese">六</div><div class="french-word">six</div></div>
+        <div class="vocab-card"><div class="chinese">七</div><div class="french-word">sept</div></div>
+        <div class="vocab-card"><div class="chinese">八</div><div class="french-word">huit</div></div>
+        <div class="vocab-card"><div class="chinese">九</div><div class="french-word">neuf</div></div>
+        <div class="vocab-card"><div class="chinese">十</div><div class="french-word">dix</div></div>
+        <div class="vocab-card"><div class="chinese">十一</div><div class="french-word">onze</div></div>
+        <div class="vocab-card"><div class="chinese">十二</div><div class="french-word">douze</div></div>
+        <div class="vocab-card"><div class="chinese">十三</div><div class="french-word">treize</div></div>
+        <div class="vocab-card"><div class="chinese">十四</div><div class="french-word">quatorze</div></div>
+        <div class="vocab-card"><div class="chinese">十五</div><div class="french-word">quinze</div></div>
+        <div class="vocab-card"><div class="chinese">十六</div><div class="french-word">seize</div></div>
+        <div class="vocab-card"><div class="chinese">十七</div><div class="french-word">dix-sept</div></div>
+        <div class="vocab-card"><div class="chinese">十八</div><div class="french-word">dix-huit</div></div>
+        <div class="vocab-card"><div class="chinese">十九</div><div class="french-word">dix-neuf</div></div>
+        <div class="vocab-card"><div class="chinese">二十</div><div class="french-word">vingt</div></div>
+      </div>
+
+      <div class="img-placeholder">
+        [IMAGE: Visual representation of numbers 1-20 with objects to count - apples, books, cats, etc.]
+      </div>
+    </section>
+
+    <!-- 4. Colors -->
+    <section class="card" id="colors">
+      <h2>4) Colors — 颜色</h2>
+      
+      <div class="grid three">
+        <div class="vocab-card">
+          <div class="chinese">红色</div>
+          <div class="english">red</div>
+          <div class="french-word" style="color:#ef4444">rouge</div>
+        </div>
+        <div class="vocab-card">
+          <div class="chinese">蓝色</div>
+          <div class="english">blue</div>
+          <div class="french-word" style="color:#3b82f6">bleu(e)</div>
+        </div>
+        <div class="vocab-card">
+          <div class="chinese">绿色</div>
+          <div class="english">green</div>
+          <div class="french-word" style="color:#22c55e">vert(e)</div>
+        </div>
+        <div class="vocab-card">
+          <div class="chinese">黄色</div>
+          <div class="english">yellow</div>
+          <div class="french-word" style="color:#eab308">jaune</div>
+        </div>
+        <div class="vocab-card">
+          <div class="chinese">黑色</div>
+          <div class="english">black</div>
+          <div class="french-word">noir(e)</div>
+        </div>
+        <div class="vocab-card">
+          <div class="chinese">白色</div>
+          <div class="english">white</div>
+          <div class="french-word" style="color:#cbd5e1">blanc(he)</div>
+        </div>
+        <div class="vocab-card">
+          <div class="chinese">橙色</div>
+          <div class="english">orange</div>
+          <div class="french-word" style="color:#f97316">orange</div>
+        </div>
+        <div class="vocab-card">
+          <div class="chinese">粉红色</div>
+          <div class="english">pink</div>
+          <div class="french-word" style="color:#ec4899">rose</div>
+        </div>
+        <div class="vocab-card">
+          <div class="chinese">灰色</div>
+          <div class="english">gray</div>
+          <div class="french-word" style="color:#94a3b8">gris(e)</div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <p><strong>Important:</strong> Colors are adjectives and must agree with the noun in gender!</p>
+        <p><strong>重要：</strong> 颜色是形容词，必须与名词的性别一致！</p>
+        <ul>
+          <li><strong>un chat noir</strong> — a black cat (masculine)</li>
+          <li><strong>une voiture noire</strong> — a black car (feminine)</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 5. Gender: Masculine & Feminine -->
+    <section class="card" id="gender">
+      <h2>5) Noun Gender — 名词性别 (阳性 Masculine / 阴性 Feminine)</h2>
+      
+      <div class="callout">
+        <p><strong>Key Concept:</strong> In French, ALL nouns have gender! 法语中所有名词都有性别！</p>
+        <p>This is different from Chinese where there is no grammatical gender.</p>
+        <p>这与中文不同，中文没有语法性别。</p>
+      </div>
+
+      <div class="grid two">
+        <div>
+          <h3><span class="pill masc">Masculine 阳性</span></h3>
+          <div class="example-box">
+            <p><strong>Articles:</strong> le (the), un (a/an)</p>
+            <table>
+              <thead><tr><th>中文</th><th>English</th><th>Français</th></tr></thead>
+              <tbody>
+                <tr><td>猫</td><td>cat</td><td><strong>le chat</strong></td></tr>
+                <tr><td>狗</td><td>dog</td><td><strong>le chien</strong></td></tr>
+                <tr><td>书</td><td>book</td><td><strong>le livre</strong></td></tr>
+                <tr><td>笔</td><td>pen</td><td><strong>le stylo</strong></td></tr>
+                <tr><td>父亲</td><td>father</td><td><strong>le père</strong></td></tr>
+                <tr><td>兄弟</td><td>brother</td><td><strong>le frère</strong></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div>
+          <h3><span class="pill fem">Feminine 阴性</span></h3>
+          <div class="example-box">
+            <p><strong>Articles:</strong> la (the), une (a/an)</p>
+            <table>
+              <thead><tr><th>中文</th><th>English</th><th>Français</th></tr></thead>
+              <tbody>
+                <tr><td>桌子</td><td>table</td><td><strong>la table</strong></td></tr>
+                <tr><td>椅子</td><td>chair</td><td><strong>la chaise</strong></td></tr>
+                <tr><td>房子</td><td>house</td><td><strong>la maison</strong></td></tr>
+                <tr><td>学校</td><td>school</td><td><strong>l'école</strong></td></tr>
+                <tr><td>母亲</td><td>mother</td><td><strong>la mère</strong></td></tr>
+                <tr><td>姐妹</td><td>sister</td><td><strong>la sœur</strong></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <h3>Sorting Activity: Masculine or Feminine? — 分类练习</h3>
+      <p class="hint">Drag each word to the correct gender category. 把每个词拖到正确的性别类别。</p>
+      <div class="grid" style="grid-template-columns: 2fr 3fr">
+        <div>
+          <div class="zone-title">Words — 单词</div>
+          <div id="chips-gender" class="dropzone"></div>
+          <div class="row" style="margin-top:0.6rem">
+            <button class="btn" onclick="resetGender()">Reset</button>
+            <button class="btn primary" onclick="checkGender()">Check</button>
+            <div aria-live="polite" id="score-gender" class="score" style="margin-left:auto"></div>
+          </div>
+        </div>
+        <div class="grid two">
+          <div>
+            <div class="zone-title"><span class="pill masc">Masculine 阳性</span></div>
+            <div id="zone-masc" class="dropzone"></div>
+          </div>
+          <div>
+            <div class="zone-title"><span class="pill fem">Feminine 阴性</span></div>
+            <div id="zone-fem" class="dropzone"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Verb ÊTRE (to be) -->
+    <section class="card" id="etre">
+      <h2>6) The Verb ÊTRE (to be) — 动词"是"</h2>
+      
+      <div class="callout">
+        <p><strong>ÊTRE</strong> is the most important verb in French! It means "to be."</p>
+        <p><strong>ÊTRE</strong> 是法语中最重要的动词！意思是"是"。</p>
+      </div>
+
+      <div class="grid two">
+        <div class="conj-box">
+          <h3>Conjugation — 变位</h3>
+          <table>
+            <thead><tr><th>Subject</th><th>Verb</th><th>中文</th></tr></thead>
+            <tbody>
+              <tr><td><strong>je</strong></td><td><strong>suis</strong></td><td>我是</td></tr>
+              <tr><td><strong>tu</strong></td><td><strong>es</strong></td><td>你是</td></tr>
+              <tr><td><strong>il/elle</strong></td><td><strong>est</strong></td><td>他/她是</td></tr>
+              <tr><td><strong>nous</strong></td><td><strong>sommes</strong></td><td>我们是</td></tr>
+              <tr><td><strong>vous</strong></td><td><strong>êtes</strong></td><td>您是/你们是</td></tr>
+              <tr><td><strong>ils/elles</strong></td><td><strong>sont</strong></td><td>他们/她们是</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <h3>Example Sentences — 例句</h3>
+          <div class="example-box">
+            <p><strong>Je suis chinois(e)</strong></p>
+            <p class="hint">我是中国人 / I am Chinese</p>
+          </div>
+          <div class="example-box">
+            <p><strong>Tu es étudiant(e)</strong></p>
+            <p class="hint">你是学生 / You are a student</p>
+          </div>
+          <div class="example-box">
+            <p><strong>Il est français</strong></p>
+            <p class="hint">他是法国人 / He is French</p>
+          </div>
+          <div class="example-box">
+            <p><strong>Nous sommes content(e)s</strong></p>
+            <p class="hint">我们很开心 / We are happy</p>
+          </div>
+        </div>
+      </div>
+
+      <h3>Fill in the Blanks with ÊTRE — 用ÊTRE填空</h3>
+      <div class="example-box">
+        <p>1. Je <input type="text" id="etre1" style="width:100px" placeholder="suis"> étudiant. (我是学生)</p>
+        <p>2. Tu <input type="text" id="etre2" style="width:100px" placeholder="es"> français? (你是法国人吗？)</p>
+        <p>3. Elle <input type="text" id="etre3" style="width:100px" placeholder="est"> chinoise. (她是中国人)</p>
+        <p>4. Nous <input type="text" id="etre4" style="width:100px" placeholder="sommes"> contents. (我们很开心)</p>
+        <button class="btn primary" onclick="checkEtre()">Check Answers</button>
+        <span id="etre-feedback" class="hint" aria-live="polite"></span>
+      </div>
+    </section>
+
+    <!-- 7. Verb AVOIR (to have) -->
+    <section class="card" id="avoir">
+      <h2>7) The Verb AVOIR (to have) — 动词"有"</h2>
+      
+      <div class="callout">
+        <p><strong>AVOIR</strong> means "to have" and is used very frequently!</p>
+        <p><strong>AVOIR</strong> 意思是"有"，使用非常频繁！</p>
+      </div>
+
+      <div class="grid two">
+        <div class="conj-box">
+          <h3>Conjugation — 变位</h3>
+          <table>
+            <thead><tr><th>Subject</th><th>Verb</th><th>中文</th></tr></thead>
+            <tbody>
+              <tr><td><strong>j'</strong></td><td><strong>ai</strong></td><td>我有</td></tr>
+              <tr><td><strong>tu</strong></td><td><strong>as</strong></td><td>你有</td></tr>
+              <tr><td><strong>il/elle</strong></td><td><strong>a</strong></td><td>他/她有</td></tr>
+              <tr><td><strong>nous</strong></td><td><strong>avons</strong></td><td>我们有</td></tr>
+              <tr><td><strong>vous</strong></td><td><strong>avez</strong></td><td>您有/你们有</td></tr>
+              <tr><td><strong>ils/elles</strong></td><td><strong>ont</strong></td><td>他们/她们有</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <h3>Example Sentences — 例句</h3>
+          <div class="example-box">
+            <p><strong>J'ai un chat</strong></p>
+            <p class="hint">我有一只猫 / I have a cat</p>
+          </div>
+          <div class="example-box">
+            <p><strong>Tu as un livre</strong></p>
+            <p class="hint">你有一本书 / You have a book</p>
+          </div>
+          <div class="example-box">
+            <p><strong>Elle a quinze ans</strong></p>
+            <p class="hint">她15岁 / She is 15 years old (literally: she has 15 years)</p>
+          </div>
+          <div class="example-box">
+            <p><strong>Nous avons faim</strong></p>
+            <p class="hint">我们饿了 / We are hungry (literally: we have hunger)</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <h3>Common Expressions with AVOIR — 常用表达</h3>
+        <ul>
+          <li><strong>J'ai faim</strong> — 我饿了 (I'm hungry)</li>
+          <li><strong>J'ai soif</strong> — 我渴了 (I'm thirsty)</li>
+          <li><strong>J'ai chaud</strong> — 我热 (I'm hot)</li>
+          <li><strong>J'ai froid</strong> — 我冷 (I'm cold)</li>
+          <li><strong>J'ai ... ans</strong> — 我...岁 (I am ... years old)</li>
+        </ul>
+      </div>
+
+      <h3>Multiple Choice: ÊTRE or AVOIR? — 选择题</h3>
+      <div class="grid two">
+        <div class="example-box">
+          <p><strong>Je ___ étudiant.</strong> (我是学生)</p>
+          <div class="radio-group" id="verb1">
+            <label class="radio-option"><input type="radio" name="verb1" value="A"> ai</label>
+            <label class="radio-option"><input type="radio" name="verb1" value="B"> suis</label>
+          </div>
+          <button class="btn" onclick="checkMC('verb1', 'B')">Check</button>
+        </div>
+        <div class="example-box">
+          <p><strong>Tu ___ un chat.</strong> (你有一只猫)</p>
+          <div class="radio-group" id="verb2">
+            <label class="radio-option"><input type="radio" name="verb2" value="A"> as</label>
+            <label class="radio-option"><input type="radio" name="verb2" value="B"> es</label>
+          </div>
+          <button class="btn" onclick="checkMC('verb2', 'A')">Check</button>
+        </div>
+        <div class="example-box">
+          <p><strong>Il ___ français.</strong> (他是法国人)</p>
+          <div class="radio-group" id="verb3">
+            <label class="radio-option"><input type="radio" name="verb3" value="A"> a</label>
+            <label class="radio-option"><input type="radio" name="verb3" value="B"> est</label>
+          </div>
+          <button class="btn" onclick="checkMC('verb3', 'B')">Check</button>
+        </div>
+        <div class="example-box">
+          <p><strong>Nous ___ faim.</strong> (我们饿了)</p>
+          <div class="radio-group" id="verb4">
+            <label class="radio-option"><input type="radio" name="verb4" value="A"> avons</label>
+            <label class="radio-option"><input type="radio" name="verb4" value="B"> sommes</label>
+          </div>
+          <button class="btn" onclick="checkMC('verb4', 'A')">Check</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. Basic -ER Verbs -->
+    <section class="card" id="er-verbs">
+      <h2>8) Regular -ER Verbs — 规则-ER动词</h2>
+      
+      <div class="callout">
+        <p>Most French verbs end in -ER and follow the same pattern!</p>
+        <p>大多数法语动词以-ER结尾，遵循相同的变位规则！</p>
+      </div>
+
+      <h3>Common -ER Verbs — 常用-ER动词</h3>
+      <div class="grid three">
+        <div class="vocab-card">
+          <div class="chinese">说话</div>
+          <div class="english">to speak</div>
+          <div class="french-word">parler</div>
+        </div>
+        <div class="vocab-card">
+          <div class="chinese">喜欢/爱</div>
+          <div class="english">to like/love</div>
+          <div class="french-word">aimer</div>
+        </div>
+        <div class="vocab-card">
+          <div class="chinese">学习</div>
+          <div class="english">to study</div>
+          <div class="french-word">étudier</div>
+        </div>
+        <div class="vocab-card">
+          <div class="chinese">工作</div>
+          <div class="english">to work</div>
+          <div class="french-word">travailler</div>
+        </div>
+        <div class="vocab-card">
+          <div class="chinese">看</div>
+          <div class="english">to watch</div>
+          <div class="french-word">regarder</div>
+        </div>
+        <div class="vocab-card">
+          <div class="chinese">吃</div>
+          <div class="english">to eat</div>
+          <div class="french-word">manger</div>
+        </div>
+      </div>
+
+      <div class="grid two">
+        <div class="conj-box">
+          <h3>PARLER (to speak) — 变位</h3>
+          <table>
+            <tbody>
+              <tr><td><strong>je parle</strong></td><td>我说</td></tr>
+              <tr><td><strong>tu parles</strong></td><td>你说</td></tr>
+              <tr><td><strong>il/elle parle</strong></td><td>他/她说</td></tr>
+              <tr><td><strong>nous parlons</strong></td><td>我们说</td></tr>
+              <tr><td><strong>vous parlez</strong></td><td>您说/你们说</td></tr>
+              <tr><td><strong>ils/elles parlent</strong></td><td>他们/她们说</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <h3>Pattern for ALL -ER Verbs:</h3>
+          <div class="example-box">
+            <p>1. Remove the -ER ending</p>
+            <p>2. Add these endings:</p>
+            <ul>
+              <li>je: <strong>-e</strong></li>
+              <li>tu: <strong>-es</strong></li>
+              <li>il/elle: <strong>-e</strong></li>
+              <li>nous: <strong>-ons</strong></li>
+              <li>vous: <strong>-ez</strong></li>
+              <li>ils/elles: <strong>-ent</strong></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <h3>Practice: Conjugate AIMER (to like) — 练习变位</h3>
+      <div class="example-box">
+        <p>1. Je <input type="text" id="er1" style="width:120px" placeholder="aime"> le français. (我喜欢法语)</p>
+        <p>2. Tu <input type="text" id="er2" style="width:120px" placeholder="aimes"> la pizza. (你喜欢披萨)</p>
+        <p>3. Nous <input type="text" id="er3" style="width:120px" placeholder="aimons"> le chocolat. (我们喜欢巧克力)</p>
+        <button class="btn primary" onclick="checkER()">Check Answers</button>
+        <span id="er-feedback" class="hint" aria-live="polite"></span>
+      </div>
+    </section>
+
+    <!-- 9. Negation -->
+    <section class="card" id="negation">
+      <h2>9) Making Sentences Negative — 否定句</h2>
+      
+      <div class="callout">
+        <h3>Formula — 公式: ne + verb + pas</h3>
+        <p>To make a sentence negative, put <strong>ne</strong> before the verb and <strong>pas</strong> after.</p>
+        <p>要使句子变为否定，在动词前加<strong>ne</strong>，在动词后加<strong>pas</strong>。</p>
+      </div>
+
+      <div class="grid two">
+        <div>
+          <h3>Positive — 肯定句</h3>
+          <div class="example-box">
+            <p><strong>Je parle français</strong></p>
+            <p class="hint">我说法语 / I speak French</p>
+          </div>
+          <div class="example-box">
+            <p><strong>Tu aimes le café</strong></p>
+            <p class="hint">你喜欢咖啡 / You like coffee</p>
+          </div>
+          <div class="example-box">
+            <p><strong>Il est content</strong></p>
+            <p class="hint">他开心 / He is happy</p>
+          </div>
+        </div>
+        <div>
+          <h3>Negative — 否定句</h3>
+          <div class="example-box">
+            <p><strong>Je <span style="color:#ef4444">ne</span> parle <span style="color:#ef4444">pas</span> français</strong></p>
+            <p class="hint">我不说法语 / I don't speak French</p>
+          </div>
+          <div class="example-box">
+            <p><strong>Tu <span style="color:#ef4444">n'</span>aimes <span style="color:#ef4444">pas</span> le café</strong></p>
+            <p class="hint">你不喜欢咖啡 / You don't like coffee</p>
+            <p class="hint" style="font-size:0.8rem">Note: "ne" becomes "n'" before a vowel</p>
+          </div>
+          <div class="example-box">
+            <p><strong>Il <span style="color:#ef4444">n'</span>est <span style="color:#ef4444">pas</span> content</strong></p>
+            <p class="hint">他不开心 / He is not happy</p>
+          </div>
+        </div>
+      </div>
+
+      <h3>Practice: Make These Sentences Negative — 练习</h3>
+      <div class="example-box">
+        <p><strong>1. Je suis français.</strong> → Je <input type="text" id="neg1" style="width:80px" placeholder="ne"> suis <input type="text" id="neg2" style="width:80px" placeholder="pas"> français.</p>
+        <p><strong>2. Tu as un chat.</strong> → Tu <input type="text" id="neg3" style="width:80px" placeholder="n'"> as <input type="text" id="neg4" style="width:80px" placeholder="pas"> de chat.</p>
+        <button class="btn primary" onclick="checkNeg()">Check Answers</button>
+        <span id="neg-feedback" class="hint" aria-live="polite"></span>
+      </div>
+    </section>
+
+    <!-- 10. Questions -->
+    <section class="card" id="questions">
+      <h2>10) Asking Questions — 提问</h2>
+      
+      <div class="callout">
+        <h3>Three Ways to Ask Questions in French:</h3>
+        <p>法语中提问的三种方式：</p>
+      </div>
+
+      <div class="grid three">
+        <div class="example-box">
+          <h3>1. Intonation (informal)</h3>
+          <p class="hint">Just raise your voice at the end</p>
+          <p><strong>Tu parles français?</strong></p>
+          <p class="hint">你说法语吗？</p>
+        </div>
+        <div class="example-box">
+          <h3>2. Est-ce que... (standard)</h3>
+          <p class="hint">Add "Est-ce que" at the beginning</p>
+          <p><strong>Est-ce que tu parles français?</strong></p>
+          <p class="hint">你说法语吗？</p>
+        </div>
+        <div class="example-box">
+          <h3>3. Inversion (formal)</h3>
+          <p class="hint">Switch verb and subject</p>
+          <p><strong>Parles-tu français?</strong></p>
+          <p class="hint">你说法语吗？</p>
+        </div>
+      </div>
+
+      <h3>Question Words — 疑问词</h3>
+      <table>
+        <thead><tr><th>中文</th><th>English</th><th>Français</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td>谁</td><td>who</td><td><strong>qui</strong></td><td>Qui est-ce? (这是谁？)</td></tr>
+          <tr><td>什么</td><td>what</td><td><strong>que/quoi</strong></td><td>Qu'est-ce que c'est? (这是什么？)</td></tr>
+          <tr><td>哪里</td><td>where</td><td><strong>où</strong></td><td>Où habites-tu? (你住在哪里？)</td></tr>
+          <tr><td>什么时候</td><td>when</td><td><strong>quand</strong></td><td>Quand arrives-tu? (你什么时候到？)</td></tr>
+          <tr><td>为什么</td><td>why</td><td><strong>pourquoi</strong></td><td>Pourquoi? (为什么？)</td></tr>
+          <tr><td>怎么样</td><td>how</td><td><strong>comment</strong></td><td>Comment ça va? (你好吗？)</td></tr>
+          <tr><td>多少</td><td>how much/many</td><td><strong>combien</strong></td><td>Combien ça coûte? (多少钱？)</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 11. Final Challenge -->
+    <section class="card" id="challenge">
+      <h2>11) Final Challenge — 综合挑战</h2>
+      
+      <div class="example-box">
+        <h3>Translate to French — 翻译成法语</h3>
+        <p>1. Hello, my name is Marie. (你好，我叫玛丽。)</p>
+        <input type="text" id="trans1" placeholder="Bonjour, je m'appelle Marie.">
+        
+        <p>2. I am 14 years old. (我14岁。)</p>
+        <input type="text" id="trans2" placeholder="J'ai quatorze ans.">
+        
+        <p>3. I have a cat. (我有一只猫。)</p>
+        <input type="text" id="trans3" placeholder="J'ai un chat.">
+        
+        <p>4. I like French. (我喜欢法语。)</p>
+        <input type="text" id="trans4" placeholder="J'aime le français.">
+        
+        <button class="btn good" onclick="alert('Good work! Check your answers with your teacher. 做得好！请老师检查你的答案。')">Submit</button>
+      </div>
+
+      <div class="notice">
+        <h3>Conversation Practice — 对话练习</h3>
+        <p>Practice this dialogue with a partner:</p>
+        <p><strong>A:</strong> Bonjour! Comment tu t'appelles?</p>
+        <p><strong>B:</strong> Je m'appelle [your name]. Et toi?</p>
+        <p><strong>A:</strong> Je m'appelle [your name]. Quel âge as-tu?</p>
+        <p><strong>B:</strong> J'ai [age] ans. Et toi?</p>
+        <p><strong>A:</strong> J'ai [age] ans. Tu parles français?</p>
+        <p><strong>B:</strong> Oui, je parle un peu français. / Non, je ne parle pas bien français.</p>
+        <p><strong>A:</strong> Au revoir!</p>
+        <p><strong>B:</strong> Au revoir!</p>
+      </div>
+    </section>
+
+    <!-- 12. Summary -->
+    <section class="card" id="summary">
+      <h2>12) Lesson Summary — 课程总结</h2>
+      
+      <div class="callout">
+        <h3>What You've Learned — 你学到了什么：</h3>
+        <ul>
+          <li>✓ Greetings and polite expressions — 问候和礼貌用语</li>
+          <li>✓ How to introduce yourself — 如何自我介绍</li>
+          <li>✓ Numbers 0-20 — 数字0-20</li>
+          <li>✓ Colors — 颜色</li>
+          <li>✓ Masculine and feminine nouns — 阳性和阴性名词</li>
+          <li>✓ Verb ÊTRE (to be) — 动词"是"</li>
+          <li>✓ Verb AVOIR (to have) — 动词"有"</li>
+          <li>✓ Regular -ER verbs — 规则-ER动词</li>
+          <li>✓ Making negative sentences — 否定句</li>
+          <li>✓ Asking questions — 提问</li>
+        </ul>
+      </div>
+
+      <div class="notice">
+        <h3>Keep Practicing! — 继续练习！</h3>
+        <p>To master French, you need to practice every day. Review this lesson regularly and try to speak French with your classmates!</p>
+        <p>要掌握法语，你需要每天练习。定期复习这节课，尝试和同学说法语！</p>
+      </div>
+    </section>
+
+    <div class="footer">© A1 French Interactive Lesson for Chinese Learners. Use freely in class. 为中国学习者设计的法语A1互动课程。</div>
+  </main>
+
+<script>
+  // --- Gender Sorting Activity ---
+  const GENDER_ITEMS = [
+    {text:"le chat (猫)", gender:"masc"},
+    {text:"la table (桌子)", gender:"fem"},
+    {text:"le livre (书)", gender:"masc"},
+    {text:"la maison (房子)", gender:"fem"},
+    {text:"le chien (狗)", gender:"masc"},
+    {text:"la chaise (椅子)", gender:"fem"},
+    {text:"le stylo (笔)", gender:"masc"},
+    {text:"l'école (学校)", gender:"fem"},
+    {text:"le père (父亲)", gender:"masc"},
+    {text:"la mère (母亲)", gender:"fem"}
+  ];
+
+  const chipsGender = document.getElementById('chips-gender');
+  const zoneMasc = document.getElementById('zone-masc');
+  const zoneFem = document.getElementById('zone-fem');
+  const scoreGender = document.getElementById('score-gender');
+
+  function makeChip(item, idx){
+    const el = document.createElement('div');
+    el.className = 'chip';
+    el.textContent = item.text;
+    el.setAttribute('draggable','true');
+    el.dataset.idx = idx;
+    el.dataset.gender = item.gender;
+    el.addEventListener('dragstart', e=>{
+      e.dataTransfer.setData('text/plain', idx);
+    });
+    return el;
+  }
+
+  function setupDropzone(zone){
+    zone.addEventListener('dragover', e=>{ e.preventDefault(); zone.style.outline='2px solid #475569';});
+    zone.addEventListener('dragleave', ()=>{ zone.style.outline='none';});
+    zone.addEventListener('drop', e=>{
+      e.preventDefault(); zone.style.outline='none';
+      const idx = e.dataTransfer.getData('text/plain');
+      const chip = document.querySelector(`.chip[data-idx="${idx}"]`);
+      if(chip) zone.appendChild(chip);
+    });
+  }
+
+  function resetGender(){
+    chipsGender.innerHTML=''; zoneMasc.innerHTML=''; zoneFem.innerHTML=''; scoreGender.textContent='';
+    GENDER_ITEMS.forEach((it,i)=> chipsGender.appendChild(makeChip(it,i)) );
+  }
+
+  function checkGender(){
+    let correct = 0, total = GENDER_ITEMS.length;
+    zoneMasc.querySelectorAll('.chip').forEach(ch=>{ 
+      if(ch.dataset.gender==='masc') correct++; 
+      ch.style.borderColor = ch.dataset.gender==='masc' ? '#16a34a' : '#ef4444'; 
+    });
+    zoneFem.querySelectorAll('.chip').forEach(ch=>{ 
+      if(ch.dataset.gender==='fem') correct++; 
+      ch.style.borderColor = ch.dataset.gender==='fem' ? '#16a34a' : '#ef4444'; 
+    });
+    scoreGender.textContent = `Score: ${correct} / ${total}`;
+  }
+
+  setupDropzone(chipsGender); setupDropzone(zoneMasc); setupDropzone(zoneFem);
+  resetGender();
+
+  // --- Multiple Choice Function ---
+  function checkMC(id, correct){
+    const group = document.getElementById(id);
+    const selected = group.querySelector('input[type="radio"]:checked');
+    if(!selected){
+      alert('Please select an answer first! 请先选择一个答案！');
+      return;
+    }
+    const options = group.querySelectorAll('.radio-option');
+    options.forEach(opt => {
+      const input = opt.querySelector('input');
+      opt.classList.remove('correct', 'incorrect');
+      if(input.value === correct){
+        opt.classList.add('correct');
+      } else if(input.checked){
+        opt.classList.add('incorrect');
+      }
+    });
+  }
+
+  // --- Introduction Fill in Blanks ---
+  function checkIntro(){
+    const ans1 = document.getElementById('intro1').value.trim().toLowerCase();
+    const ans2 = document.getElementById('intro2').value.trim().toLowerCase();
+    const feedback = document.getElementById('intro-feedback');
+    let correct = 0;
+    if(ans1 === "je m'appelle" || ans1 === "je m'appelle") correct++;
+    if(ans2 === "j'ai" || ans2 === "j'ai") correct++;
+    feedback.textContent = correct === 2 ? 'Perfect! 完美！' : `${correct}/2 correct. 正确${correct}个。`;
+    feedback.style.color = correct === 2 ? '#86efac' : '#fca5a5';
+  }
+
+  // --- ÊTRE Fill in Blanks ---
+  function checkEtre(){
+    const answers = [
+      document.getElementById('etre1').value.trim().toLowerCase(),
+      document.getElementById('etre2').value.trim().toLowerCase(),
+      document.getElementById('etre3').value.trim().toLowerCase(),
+      document.getElementById('etre4').value.trim().toLowerCase()
+    ];
+    const correct = ['suis', 'es', 'est', 'sommes'];
+    let score = 0;
+    answers.forEach((ans, i) => { if(ans === correct[i]) score++; });
+    const feedback = document.getElementById('etre-feedback');
+    feedback.textContent = score === 4 ? 'Perfect! 完美！' : `${score}/4 correct. 正确${score}个。`;
+    feedback.style.color = score === 4 ? '#86efac' : '#fca5a5';
+  }
+
+  // --- ER Verbs Fill in Blanks ---
+  function checkER(){
+    const answers = [
+      document.getElementById('er1').value.trim().toLowerCase(),
+      document.getElementById('er2').value.trim().toLowerCase(),
+      document.getElementById('er3').value.trim().toLowerCase()
+    ];
+    const correct = ['aime', 'aimes', 'aimons'];
+    let score = 0;
+    answers.forEach((ans, i) => { if(ans === correct[i]) score++; });
+    const feedback = document.getElementById('er-feedback');
+    feedback.textContent = score === 3 ? 'Perfect! 完美！' : `${score}/3 correct. 正确${score}个。`;
+    feedback.style.color = score === 3 ? '#86efac' : '#fca5a5';
+  }
+
+  // --- Negation Fill in Blanks ---
+  function checkNeg(){
+    const answers = [
+      document.getElementById('neg1').value.trim().toLowerCase(),
+      document.getElementById('neg2').value.trim().toLowerCase(),
+      document.getElementById('neg3').value.trim().toLowerCase(),
+      document.getElementById('neg4').value.trim().toLowerCase()
+    ];
+    const correct = ['ne', 'pas', "n'", 'pas'];
+    let score = 0;
+    answers.forEach((ans, i) => { 
+      if(ans === correct[i] || (i === 2 && ans === "n'")) score++; 
+    });
+    const feedback = document.getElementById('neg-feedback');
+    feedback.textContent = score === 4 ? 'Perfect! 完美！' : `${score}/4 correct. 正确${score}个。`;
+    feedback.style.color = score === 4 ? '#86efac' : '#fca5a5';
+  }
+</script>
+</body>
+</html>
+
